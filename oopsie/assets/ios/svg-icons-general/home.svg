@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 64 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-400,0)">
+        <g id="Delete">
+        </g>
+        <g id="Search">
+        </g>
+        <g id="Home" transform="matrix(1.99991,1.97215e-31,-2.46519e-32,1.99991,-220.557,-81.0505)">
+            <path d="M333.211,54.623L333.211,54.452C333.211,53.65 333.852,53 334.655,53C335.451,53 336.098,53.642 336.098,54.452L336.098,57.195L338.449,59.289C339.273,60.024 339.045,60.619 337.939,60.619L336.098,60.619L336.098,71.993C336.098,72.549 335.66,73 335.09,73L317.863,73C317.307,73 316.856,72.551 316.856,71.993L316.856,60.619L315.005,60.619C313.899,60.619 313.671,60.024 314.496,59.289L325.729,49.281C326.139,48.916 326.805,48.916 327.215,49.281L333.211,54.623ZM329.363,63L329.363,70L333.211,70L333.211,63L329.363,63Z"/>
+        </g>
+    </g>
+</svg>
