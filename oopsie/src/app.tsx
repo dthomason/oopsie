@@ -1,7 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, LogBox, StyleSheet } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { BrandIcon } from './components';
@@ -13,7 +14,7 @@ import { useStore } from './store';
 LogBox.ignoreLogs(['Redux']);
 // LogBox.ignoreAllLogs();
 
-const App = () => {
+const App: FC = () => {
   const { refreshToken } = useRefresh();
   const { iconColor, theme } = useCustomTheme();
   const [isLoading, setIsLoading] = useState(true);
@@ -40,17 +41,19 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      {isLoading ? (
-        <View style={styles.loading}>
-          <BrandIcon color={iconColor} size={110} />
-        </View>
-      ) : (
-        <ThemeProvider theme={theme}>
-          <NavigationContainer theme={theme}>
-            {signedIn ? <AppNavigator /> : <AuthNavigator />}
-          </NavigationContainer>
-        </ThemeProvider>
-      )}
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        {isLoading ? (
+          <View style={styles.loading}>
+            <BrandIcon color={iconColor} size={110} />
+          </View>
+        ) : (
+          <ThemeProvider theme={theme}>
+            <NavigationContainer theme={theme}>
+              {signedIn ? <AppNavigator /> : <AuthNavigator />}
+            </NavigationContainer>
+          </ThemeProvider>
+        )}
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 };

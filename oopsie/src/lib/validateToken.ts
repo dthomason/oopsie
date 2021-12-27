@@ -1,4 +1,3 @@
-import Config from 'react-native-config';
 import setCookie from 'set-cookie-parser';
 
 import { decodeToken } from '../store';
@@ -21,10 +20,7 @@ export const validateToken = (cookie: string): ValidatedTokenResponse => {
     map: true,
   });
 
-  if (
-    parsedCookie.accessToken &&
-    parsedCookie.accessToken.domain === Config.BASE_URL
-  ) {
+  if (parsedCookie.accessToken) {
     const { expires, value } = parsedCookie.accessToken;
     const now = new Date();
 

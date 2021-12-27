@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { UseFormSetError } from 'react-hook-form';
+import { FieldValues, UseFormSetError } from 'react-hook-form';
 
 import { configureAxios, isAxiosError, parsedAxiosError } from '../../../lib';
 import { AuthNavigation } from '../../../navigator';
@@ -13,7 +13,7 @@ interface UseSignUp {
 }
 
 export const useSignUp = (
-  setError: UseFormSetError<SignUpRequest>,
+  setError: UseFormSetError<FieldValues>,
 ): UseSignUp => {
   const updateUserValues = useStore(state => state.updateUserValues);
   const setTypedValues = useStore(state => state.setTypedValues);
