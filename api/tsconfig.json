@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "target": "ES2019",
+    "sourceMap": true,
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "strict": true,
+    "lib": ["esnext", "ES2015", "ES2019", "ES2020"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "types": ["node", "jest"],
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "./design"]
+}

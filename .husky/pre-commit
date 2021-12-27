@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+yarn workspace api test
+yarn workspace api type-check
+yarn workspace api prettier:fix
+

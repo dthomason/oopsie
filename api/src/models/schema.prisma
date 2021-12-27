@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String    @id @unique @default(cuid())
+  email          String    @unique @db.VarChar(255)
+  firstName      String?   @db.VarChar(255)
+  lastName       String?   @db.VarChar(255)
+  mobile         String    @unique @db.VarChar(10)
+  verifiedMobile Boolean   @db.Boolean
+  verifiedEmail  Boolean   @db.Boolean
+  password       String    @db.VarChar(255)
+  pin            String?   @db.VarChar(255)
+  contacts       Contact[]
+}
+
+model Contact {
+  firstName      String @db.VarChar(255)
+  lastName       String @db.VarChar(255)
+  phoneNumbers   Json[] @db.Json
+  emailAddresses Json[] @db.Json
+  recordID       String @db.VarChar(255)
+  user           User   @relation(fields: [userId], references: [id])
+  userId         String
+
+  @@unique([userId, recordID], name: "contactID")
+}
+
+enum Role {
+  USER
+  ADMIN
+}

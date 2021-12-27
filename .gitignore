@@ -1,0 +1,13 @@
+**/node_modules
+**/.env
+**/bin
+**/.DS_Store
+
+./node_modules
+./**/node_modules
+
+./**/yarn-error.log
+
+node_api/coverage
+.jwt/*
+./.jwt

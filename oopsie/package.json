@@ -61,6 +61,8 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "7.16.5",
     "@babel/runtime": "^7.12.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-react-constant-elements": "7.16.5",
     "@react-native-community/eslint-config": "^3.0.1",
     "@types/jest": "27.0.2",
     "@types/jwt-decode": "^3.1.0",
