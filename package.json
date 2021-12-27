@@ -1,0 +1,10 @@
+{
+  "name": "oopsie-root",
+  "version": "1.0.0",
+  "description": "Oopsie Root",
+  "main": "index.js",
+  "repository": "git@github.com:dthomason/oopsie.git",
+  "author": "David Thomason <dthomason@frontporch.com>",
+  "license": "NO LICENSE",
+  "private": true
+}
