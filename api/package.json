@@ -1,0 +1,60 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "author": "David Thomason",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "pre:test": "dotenv -e .env.test -- ",
+    "build:cli": "tsup pconsole/cli.ts pconsole/cli-wrapper.ts --format cjs --no-splitting --external src/orm",
+    "db:cli": "npm run build && node ./dist/cli-wrapper.js",
+    "test:studio": "yarn pre:test npx prisma studio",
+    "dev:studio": "npx prisma studio",
+    "migrate:init": "npx prisma migrate dev --name init",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "test": "yarn pre:test npx prisma migrate dev --name init && yarn jest",
+    "build": "tsc",
+    "start": "ts-node ./dist/index.ts",
+    "dev": "ts-node ./src/runDev.ts",
+    "ngrok": "./bin/ngrok http 3030",
+    "jest": "yarn pre:test jest",
+    "twilio:mock": "yarn pre:test prism mock https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_verify_v2.json",
+    "test:watch": "yarn test --watch",
+    "prettier": "prettier 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "type-check": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "chalk": "4.1.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.2.0",
+    "immer": "^9.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.20",
+    "luxon": "^1.27.0",
+    "ngrok": "^4.2.2",
+    "node": "14.16.1",
+    "pg": "^8.7.1",
+    "reflect-metadata": "^0.1.13",
+    "set-cookie-parser": "^2.4.8",
+    "tslog": "^3.3.0",
+    "twilio": "^3.67.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
+    "eslint-plugin-react": "^7.28.0"
+  },
+  "prisma": {
+    "schema": "./src/models/schema.prisma"
+  },
+  "volta": {
+    "extends": "../package.json"
+  }
+}
