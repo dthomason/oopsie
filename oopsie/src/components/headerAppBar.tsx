@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC } from 'react';
-import { Header, Icon, Divider } from 'react-native-elements';
-import { BrandIcon } from './brandIcon';
 import { View, StyleSheet } from 'react-native';
+import { Header, Icon, Divider } from 'react-native-elements';
+
 import { useCustomTheme } from '../hooks/useCustomTheme';
 import { AppNavigation } from '../navigator';
+
+import { BrandIcon } from './brandIcon';
 
 interface Props {
   onPress?: () => void;
@@ -32,7 +34,7 @@ export const HeaderAppBar: FC<Props> = ({ onPress }) => {
         }
         rightComponent={
           <Icon
-            onPress={handlePress}
+            onPress={() => handlePress}
             name="menu"
             type="feather"
             color={colors.text}

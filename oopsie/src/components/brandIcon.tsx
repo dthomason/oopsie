@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import BrandIconUniFill from '../../assets/ios/brand-icon-uni-fill.svg';
+import BrandIconUniFill from '../../assets/brand/oopsie_rounded_icon.svg';
 
 interface Props {
   color: string;

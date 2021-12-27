@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { UseFormSetError } from 'react-hook-form';
+import { useEffect } from 'react';
+import { FieldValues, UseFormSetError } from 'react-hook-form';
 
 import { configureAxios, parsedAxiosError } from '../../../lib';
 import { validateToken as parseCookie } from '../../../lib/validateToken';
@@ -15,7 +16,7 @@ interface UseSignIn {
 }
 
 export const useSignIn = (
-  setError: UseFormSetError<SignInRequest>,
+  setError: UseFormSetError<FieldValues>,
 ): UseSignIn => {
   const setSignedIn = useStore(state => state.setSignedIn);
   const updateUserValues = useStore(state => state.updateUserValues);

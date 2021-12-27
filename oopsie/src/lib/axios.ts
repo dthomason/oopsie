@@ -7,7 +7,12 @@ export const isAxiosError = <T = unknown>(
 ): error is AxiosError<T> =>
   error instanceof Error && !!(error as AxiosError).isAxiosError;
 
-export const parsedAxiosError = (error: AxiosError) => {
+interface ParsedError {
+  status: number | string;
+  error: string;
+}
+
+export const parsedAxiosError = (error: AxiosError): ParsedError => {
   return {
     status: error.response ? error.response.status : 0,
     error: error.response ? error.response.data : '',

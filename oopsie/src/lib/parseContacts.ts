@@ -22,8 +22,6 @@ export const parseContacts = (contacts: Contact[]): ReturnParsed => {
       return {
         firstName: contact.givenName || '',
         lastName: contact.familyName || '',
-        company: contact.company || '',
-        jobTitle: contact.jobTitle || '',
         emailAddresses: contact.emailAddresses.length
           ? contact.emailAddresses
           : [{ label: '', email: '' }],

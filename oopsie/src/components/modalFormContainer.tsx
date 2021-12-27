@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { Text } from 'react-native-elements';
 
-import DownPoint from '../../assets/ios/svg-icons-general/down.svg';
+import DownPoint from '../../assets/svg-icons-general/down.svg';
 import { useCustomTheme } from '../hooks';
 
 interface Props {

@@ -4,6 +4,8 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:import/warnings',
@@ -18,14 +20,12 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 13,
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'react-native'],
   rules: {
-    indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'import/no-named-as-default': 'off',
     'import/no-unresolved': 'off',
@@ -90,6 +90,5 @@ module.exports = {
     'no-inner-declarations': 'warn',
     'no-prototype-builtins': 'warn',
     'no-redeclare': 'warn',
-    'no-unused-vars': 'warn',
   },
 };

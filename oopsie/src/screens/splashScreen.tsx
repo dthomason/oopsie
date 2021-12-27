@@ -2,9 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useMemo, FC } from 'react';
 import { View, StyleSheet, Text, Animated, Easing } from 'react-native';
 
-import AppNameIcon from '../../assets/ios/appName-icon.svg';
-import { BrandIcon } from '../components/brandIcon';
-import { Pressable } from '../components/pressable';
+import AppNameIcon from '../../assets/brand/name_icon.svg';
+import { BrandIcon, Pressable } from '../components';
 import { AuthNavigation, AuthScreenProps } from '../navigator';
 import { useStore } from '../store';
 
@@ -67,7 +66,7 @@ export const SplashScreen: FC<AuthScreenProps> = () => {
         <BrandIcon color={color} size={110} />
       </View>
       <AnimatedView style={animatedWrapper}>
-        <Text style={phraseStyle}>The Last Number You Will Ever Need</Text>
+        <Text style={phraseStyle}>{"The Forgetter's Getter"}</Text>
       </AnimatedView>
       <AnimatedView style={animatedWrapper}>
         <Pressable
