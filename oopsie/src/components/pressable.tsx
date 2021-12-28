@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 
-const borderRadius = 20;
-const height = 35;
+const borderRadius = 22;
+const height = 45;
 const width = '100%';
 
 const initialColors = {
@@ -119,6 +119,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 18,
   },
 });
