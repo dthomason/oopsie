@@ -12,8 +12,6 @@ target 'oopsie' do
     :hermes_enabled => true
   )
 
-  # pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
-
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
 
   target 'oopsieTests' do
