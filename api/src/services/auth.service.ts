@@ -4,10 +4,10 @@ import { Secret, sign } from 'jsonwebtoken';
 
 import { futureDate } from '../controllers';
 import { router } from '../routes';
-import { checkVerification, startVerification } from './verifyMobile.service';
 import { log, to } from '../utils';
 
 import { UserProfile, UserService } from './user.service';
+import { checkVerification, startVerification } from './verifyMobile.service';
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
@@ -22,9 +22,9 @@ class AuthService {
   public router = router;
 
   static async validateThenCreate(req: Request): Promise<ValidationResponse> {
-    const { email, password, mobile, pin } = req.body;
+    const { mobile, pin } = req.body;
 
-    if (!(email && password && mobile && pin)) {
+    if (!(mobile && pin)) {
       return {
         conflict: 400,
         message: 'All input is required',
@@ -32,7 +32,7 @@ class AuthService {
       };
     }
 
-    const foundUser = await UserService.findByEmail(email);
+    const foundUser = await UserService.findByPhone(mobile);
 
     if (foundUser) {
       return {
@@ -43,8 +43,6 @@ class AuthService {
     }
 
     const created = await UserService.create({
-      email,
-      password,
       mobile,
       pin,
       verifiedEmail: false,
@@ -53,23 +51,22 @@ class AuthService {
 
     const { status } = await startVerification(created.mobile);
 
-    if (status !== 'success') log(status, 'Signup Verification process', email);
+    if (status !== 'success')
+      log(status, 'Signup Verification process', mobile);
 
     return { user: created };
   }
 
   static async configureTokens({
     id,
-    email,
     mobile,
     verifiedMobile,
   }: Partial<UserProfile>): Promise<any> {
     const tokenBaseParams = {
       id,
-      email,
       mobile,
       verifiedMobile,
-      aud: 'myPhone',
+      aud: 'oopsie-auth',
       exp: futureDate.getTime(),
       scope: ['openid', 'profile', 'offline_access'],
       roles: ['user'],
@@ -83,9 +80,9 @@ class AuthService {
   }
 
   static async validateSignin(req: Request): Promise<ValidationResponse> {
-    const { email, password } = req.body;
+    const { mobile, pin } = req.body;
 
-    if (!(email && password)) {
+    if (!(mobile && pin)) {
       return {
         conflict: 400,
         message: 'All input is required',
@@ -93,7 +90,7 @@ class AuthService {
       };
     }
 
-    const signingUser = await UserService.findByEmail(email);
+    const signingUser = await UserService.findByPhone(mobile);
 
     if (!signingUser)
       return {
@@ -102,9 +99,9 @@ class AuthService {
         user: req.body,
       };
 
-    const hash = await UserService.findPasswordByEmail(email);
+    const hash = await UserService.findPinByMobile(mobile);
 
-    const [match, err] = await to(compare(password, hash.password));
+    const [match, err] = await to(compare(pin, hash.pin));
 
     if (err) log(err, 'Compare failed');
 
@@ -112,15 +109,15 @@ class AuthService {
       return {
         conflict: 400,
         message: 'That username and password were not found',
-        user: email,
+        user: mobile,
       };
 
-    if (!signingUser.verifiedMobile) {
-      const { status } = await startVerification(signingUser.mobile);
+    await UserService.update(signingUser.id, { verifiedMobile: false });
 
-      if (status !== 'success')
-        log(status, 'Sign In Verify Mobile Not Verified', email);
-    }
+    const { status } = await startVerification(signingUser.mobile);
+
+    if (status !== 'success')
+      log(status, 'Sign In Verify Mobile Not Verified', mobile);
 
     return {
       user: signingUser,
@@ -128,9 +125,9 @@ class AuthService {
   }
 
   static async verifyMobile(req: any): Promise<ValidationResponse> {
-    const { email, code, mobile } = req.body;
+    const { code, mobile } = req.body;
 
-    if (!(email && code && mobile)) {
+    if (!(code && mobile)) {
       return {
         conflict: 400,
         message: 'Missing All Required Values',
@@ -138,7 +135,7 @@ class AuthService {
       };
     }
 
-    const signingUser = await UserService.findByEmail(email);
+    const signingUser = await UserService.findByPhone(mobile);
 
     if (!signingUser)
       return {
@@ -163,7 +160,7 @@ class AuthService {
     return {
       conflict: 400,
       message: 'Incorrect Code Entered',
-      user: email,
+      user: mobile,
     };
   }
 

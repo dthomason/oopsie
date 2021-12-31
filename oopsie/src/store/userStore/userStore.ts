@@ -28,14 +28,12 @@ interface TokenParams extends JwtPayload {
 
 interface InputUserValues {
   id?: string;
-  email?: string;
   mobile?: string;
   verifiedMobile?: boolean;
 }
 
 const initialValues = {
   id: '',
-  email: '',
   mobile: '',
   verifiedMobile: false,
 };
@@ -43,7 +41,6 @@ const initialValues = {
 type Permissions = 'undefined' | 'authorized' | 'denied';
 
 interface TypedValues {
-  email?: string;
   mobile?: string;
   code?: string;
 }

@@ -1,7 +1,6 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from 'axios';
 
 interface CreateRequest {
-  email: string;
   mobile: string;
   code: string;
 }
@@ -9,13 +8,12 @@ interface CreateRequest {
 interface CreateConfig extends AxiosRequestConfig {
   body: CreateRequest;
   data: CreateRequest;
-  method: "POST";
-  url: "/api/auth/verify";
+  method: 'POST';
+  url: '/api/user/verify';
 }
 
 interface ResponsePayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
 }
@@ -24,14 +22,14 @@ export type VerifyRequest = CreateRequest;
 export type VerifyResponse = ResponsePayload;
 
 /**
- * POST `/api/auth/verify
+ * POST `/api/user/verify
  *
- * { email: string, mobile: string, code: string }
+ * { mobile: string, code: string }
  */
-export const create = (data: CreateRequest): CreateConfig => {
+export const verify = (data: CreateRequest): CreateConfig => {
   return {
-    method: "POST",
-    url: "/api/auth/verify",
+    method: 'POST',
+    url: '/api/user/verify',
     body: data,
     data,
   } as const;

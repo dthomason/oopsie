@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { FC } from 'react';
+import React, { useEffect, FC } from 'react';
 import {
   useController,
   FieldValues,
@@ -8,6 +7,7 @@ import {
 } from 'react-hook-form';
 import { KeyboardType, View, StyleSheet } from 'react-native';
 import { Input } from 'react-native-elements';
+
 import { useCustomTheme } from '../hooks';
 import { useStore } from '../store';
 import { TextContentType } from '../utils';
@@ -17,6 +17,7 @@ interface TextTypes {
   placeholder: string;
   secureText: boolean;
   textContentType: TextContentType;
+  max?: number;
 }
 
 interface FieldNames {
@@ -44,8 +45,23 @@ const textTypes: Record<string, TextTypes> = {
   },
   pin: {
     keyboardType: 'number-pad',
+    max: 4,
     placeholder: 'Pin Number',
-    secureText: false,
+    secureText: true,
+    textContentType: 'none',
+  },
+  newPin: {
+    keyboardType: 'number-pad',
+    max: 4,
+    placeholder: '4 Digit PIN Number',
+    secureText: true,
+    textContentType: 'none',
+  },
+  confirmPin: {
+    keyboardType: 'number-pad',
+    max: 4,
+    placeholder: 'Confirm PIN',
+    secureText: true,
     textContentType: 'none',
   },
   newPassword: {
@@ -86,7 +102,7 @@ const storeTypes = ['mobile', 'email'];
 
 interface InputProps {
   defaultValues: FieldValues;
-  methods: Partial<UseFormReturn<FieldValues, object>>;
+  methods: Partial<UseFormReturn<FieldValues, any>>;
   name: FieldName<FieldValues>;
 }
 
@@ -142,6 +158,7 @@ export const FieldInput: FC<InputProps> = ({
         errorMessage={error && error.message ? error.message : ''}
         inputStyle={{ color: colors.text }}
         keyboardType={getType(name).keyboardType}
+        maxLength={getType(name).max || 40}
         onChangeText={field.onChange}
         onSubmitEditing={() => (!isLast ? handleNext(next) : field.onBlur)}
         onTouchStart={handleTouch}

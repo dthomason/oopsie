@@ -17,27 +17,19 @@ import { useStore } from '../../../store';
 import { useSignUp } from '../hooks/useSignUp';
 
 const validationSchema = yup.object().shape({
-  email: validate.email,
   mobile: validate.mobile,
-  pin: validate.pin,
-  newPassword: validate.newPassword,
-  secondary: validate.secondary,
+  newPin: validate.newPin,
+  confirmPin: validate.confirmPin,
 });
 
 interface FormValues {
-  email: string;
   mobile: string;
   pin: string;
-  newPassword: string;
-  secondary: string;
 }
 
 const defaultValues: FormValues = {
-  email: '',
   mobile: '',
   pin: '',
-  newPassword: '',
-  secondary: '',
 };
 
 export const SignUp: FC<AuthScreenProps> = () => {
@@ -52,10 +44,8 @@ export const SignUp: FC<AuthScreenProps> = () => {
 
   const onSubmit = (args: FormValues) => {
     const data = {
-      email: args.email,
       mobile: args.mobile,
       pin: args.pin,
-      password: args.newPassword,
     };
 
     signUp(data);
@@ -66,10 +56,6 @@ export const SignUp: FC<AuthScreenProps> = () => {
   };
 
   useEffect(() => {
-    if (typedValues.email?.length) {
-      setValue('email', typedValues.email);
-    }
-
     if (typedValues.mobile?.length) {
       setValue('mobile', typedValues.mobile);
     }
@@ -79,30 +65,17 @@ export const SignUp: FC<AuthScreenProps> = () => {
     <ModalFormContainer givenTitle="Sign Up" onClose={handleClose}>
       <View style={styles.container}>
         <FieldInput
-          name="email"
-          defaultValues={defaultValues}
-          methods={methods}
-        />
-        <FieldInput
           name="mobile"
           defaultValues={defaultValues}
           methods={methods}
         />
-        <Text style={{ textAlign: 'center' }}>
-          Choose a Pin For Using Voice-to-Contact
-        </Text>
         <FieldInput
-          name="pin"
+          name="newPin"
           defaultValues={defaultValues}
           methods={methods}
         />
         <FieldInput
-          name="newPassword"
-          defaultValues={defaultValues}
-          methods={methods}
-        />
-        <FieldInput
-          name="secondary"
+          name="confirmPin"
           defaultValues={defaultValues}
           methods={methods}
         />

@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { useEffect } from 'react';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
 
 import { configureAxios, parsedAxiosError } from '../../../lib';
 import { validateToken as parseCookie } from '../../../lib/validateToken';
 import { AuthNavigation } from '../../../navigator';
 import * as api from '../../../sdk';
-import { SignInRequest, SignInResponse } from '../../../sdk/src/signIn';
+import { SignInRequest, SignInResponse } from '../../../sdk/src/user/signIn';
 import { useStore } from '../../../store';
 import { isAxiosError } from '../../../utils';
 
@@ -25,7 +24,7 @@ export const useSignIn = (
 
   const signIn = async (args: SignInRequest): Promise<void> => {
     try {
-      const config = api.signIn.create({ ...args });
+      const config = api.user.signIn({ ...args });
 
       configureAxios({ withCredentials: true });
       const { data, headers } = await axios.request<SignInResponse>(config);
@@ -40,7 +39,6 @@ export const useSignIn = (
         updateUserValues(data);
 
         navigation.replace('Verify', {
-          email: data.email,
           mobile: data.mobile,
         });
       }

@@ -1,24 +1,24 @@
 import { AxiosRequestConfig } from 'axios';
 
-interface RequestConfig extends AxiosRequestConfig {
+interface CreateConfig extends AxiosRequestConfig {
   method: 'GET';
   url: '/api/user';
 }
 
 interface ResponsePayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
 }
 
-export type ShowUserResponse = ResponsePayload;
+export type UserShowResponse = ResponsePayload;
 
 /**
- * GET `/api/user`
+ * POST `/api/auth/signin
  *
+ * { mobile: string, pin: string }
  */
-export const show = (): RequestConfig => {
+export const show = (): CreateConfig => {
   return {
     method: 'GET',
     url: '/api/user',

@@ -8,11 +8,10 @@ import {
   validateToken,
 } from '../../../lib';
 import * as api from '../../../sdk';
-import { VerifyRequest } from '../../../sdk/src/verify';
+import { VerifyRequest } from '../../../sdk/src/user/verify';
 import { useStore } from '../../../store';
 
 interface Config {
-  email: string;
   mobile: string;
   code: string;
 }
@@ -30,7 +29,7 @@ export const useVerifyMobile = (
 
   const sendCode = async (args: Config): Promise<void> => {
     try {
-      const config = api.verify.create({ ...args });
+      const config = api.user.verify({ ...args });
 
       configureAxios({ withCredentials: true });
       const { data, headers } = await axios.request(config);

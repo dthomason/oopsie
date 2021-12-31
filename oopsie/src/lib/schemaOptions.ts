@@ -15,6 +15,7 @@ export interface ValidationParameterError {
 export const invalidMessage = 'Invalid ${path}';
 export const notAllowedMessage = 'Not allowed';
 export const passwordMatchMessage = 'Passwords must match';
+export const pinsMustMatch = 'Pins must match';
 export const requiredMessage = '${path} is Required';
 export const minimumDigits = 'Must be at least ${path} digits';
 
@@ -69,9 +70,22 @@ export const schemaOptions = {
     .matches(/[^']/, notAllowedMessage),
   pin: yup
     .string()
-    .label('4')
+    .label('Pin')
     .required(requiredMessage)
     .min(4, minimumDigits)
+    .matches(/^[0-9]+$/, invalidMessage),
+  newPin: yup
+    .string()
+    .label('Pin')
+    .required(requiredMessage)
+    .min(4, minimumDigits)
+    .matches(/^[0-9]+$/, invalidMessage),
+  confirmPin: yup
+    .string()
+    .label('Confirm Pin')
+    .required(requiredMessage)
+    .min(4)
+    .oneOf([yup.ref('newPin')])
     .matches(/^[0-9]+$/, invalidMessage),
   secondary: yup
     .string()

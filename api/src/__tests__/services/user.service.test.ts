@@ -12,13 +12,11 @@ describe('#User Service', () => {
       it('creates a new User', async () => {
         const newUser = userBuilder();
 
-        const { email } = newUser;
-
         const created = await UserService.create(newUser);
 
         expect(created).toBeDefined();
 
-        expect(created.email).toBe(email.toLowerCase());
+        expect(created.mobile).toBe(formatPhoneNumber(newUser.mobile));
       });
     });
 
@@ -27,12 +25,14 @@ describe('#User Service', () => {
         const user1 = userBuilder();
         const created1 = await UserService.create(user1);
 
-        expect(created1.email).toBe(user1.email.toLowerCase());
+        expect(created1.mobile).toBe(formatPhoneNumber(user1.mobile));
 
         await UserService.create(user1);
 
         expect(global.console.log).toHaveBeenCalledWith(
-          `User.create: Unique Constraint Violation, a user with email: ${user1.email.toLowerCase()} already exists`,
+          `User.create: Unique Constraint Violation, a user with email: ${formatPhoneNumber(
+            user1.mobile,
+          )} already exists`,
         );
       });
     });

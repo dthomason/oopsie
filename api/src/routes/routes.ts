@@ -2,7 +2,6 @@ import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import {
-  AuthController,
   ContactsController,
   VoiceController,
   Healthz,
@@ -14,28 +13,24 @@ export const router = Router();
 
 router.get('/healthz', (_, res) => Healthz.show(_, res));
 
-router.get(
-  '/auth/refresh',
-  verifyToken,
-  asyncHandler(async (req, res) => AuthController.refresh(req, res)),
-);
 router.post(
-  '/auth/signup',
-  asyncHandler(async (req, res) => AuthController.signup(req, res)),
-);
-router.post(
-  '/auth/signin',
-  asyncHandler(async (req, res) => AuthController.signin(req, res)),
-);
-router.post(
-  '/auth/verify',
-  asyncHandler(async (req, res) => AuthController.verify(req, res)),
+  '/user',
+  asyncHandler(async (req, res) => UserController.create(req, res)),
 );
 
 router.get(
   '/user',
   verifyToken,
   asyncHandler(async (req, res) => UserController.show(req, res)),
+);
+
+router.post(
+  '/user/signin',
+  asyncHandler(async (req, res) => UserController.signIn(req, res)),
+);
+router.post(
+  '/user/verify',
+  asyncHandler(async (req, res) => UserController.verify(req, res)),
 );
 
 router.get(

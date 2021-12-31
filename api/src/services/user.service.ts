@@ -12,9 +12,7 @@ export interface UserProfile {
 }
 
 interface CreateInput {
-  email: string;
   mobile: string;
-  password: string;
   pin: string;
   verifiedMobile: boolean;
   verifiedEmail: boolean;
@@ -22,20 +20,12 @@ interface CreateInput {
 
 const select = Prisma.validator<Prisma.UserSelect>()({
   id: true,
-  email: true,
   mobile: true,
   verifiedMobile: true,
 });
 
-const create = async ({
-  email,
-  password,
-  mobile,
-  pin,
-}: CreateInput): Promise<UserProfile> => {
+const create = async ({ mobile, pin }: CreateInput): Promise<UserProfile> => {
   const data = Prisma.validator<CreateInput>()({
-    email: email.toLowerCase().trim(),
-    password: await hash(password, 10),
     verifiedEmail: false,
     verifiedMobile: false,
     mobile: formatPhoneNumber(mobile),
@@ -49,7 +39,7 @@ const create = async ({
     }),
   );
 
-  if (err) log(err, 'User.create', email);
+  if (err) log(err, 'User.create', mobile);
 
   return user;
 };
@@ -124,6 +114,26 @@ const findPasswordByEmail = async (
   return user;
 };
 
+const findPinByMobile = async (mobile: string): Promise<{ pin: string }> => {
+  const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
+    mobile: formatPhoneNumber(mobile),
+  });
+  const selectPassword = Prisma.validator<Prisma.UserSelect>()({
+    pin: true,
+  });
+
+  const [user, err] = await to(
+    db.user.findUnique({
+      where,
+      select: selectPassword,
+    }),
+  );
+
+  if (err) log(err, 'User.findPinByMobile', mobile);
+
+  return user;
+};
+
 const findPinById = async (id: string): Promise<{ pin: string }> => {
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({ id });
   const selectPin = Prisma.validator<Prisma.UserSelect>()({
@@ -144,7 +154,7 @@ const findPinById = async (id: string): Promise<{ pin: string }> => {
 
 const update = async (
   id: string,
-  userData: Partial<CreateInput>,
+  userData: Partial<UserProfile>,
 ): Promise<void> => {
   const data = Prisma.validator<Prisma.UserUpdateInput>()({
     ...userData,
@@ -163,6 +173,7 @@ export const UserService = {
   findById,
   findByPhone,
   findPasswordByEmail,
+  findPinByMobile,
   findPinById,
   update,
 };

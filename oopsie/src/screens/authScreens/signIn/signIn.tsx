@@ -12,7 +12,7 @@ import {
 } from '../../../components';
 import { schemaOptions as validate } from '../../../lib';
 import { AuthNavigation, AuthScreenProps } from '../../../navigator';
-import { SignInRequest } from '../../../sdk/src/signIn';
+import { SignInRequest } from '../../../sdk/src/user/signIn';
 import { useStore } from '../../../store';
 import { useSignIn } from '../hooks';
 
@@ -32,7 +32,7 @@ const defaultValues: SignInValues = {
 };
 
 export const SignIn: FC<AuthScreenProps> = () => {
-  const typedEmail = useStore(state => state.typedValues.email);
+  const typedMobile = useStore(state => state.typedValues.mobile);
   const navigation = useNavigation<AuthNavigation>();
   const { setValue, handleSubmit, setError, ...methods } = useForm<FieldValues>(
     {
@@ -50,8 +50,8 @@ export const SignIn: FC<AuthScreenProps> = () => {
   };
 
   useEffect(() => {
-    if (typedEmail?.length) {
-      setValue('email', typedEmail);
+    if (typedMobile?.length) {
+      setValue('mobile', typedMobile);
     }
   }, []);
 
@@ -59,12 +59,12 @@ export const SignIn: FC<AuthScreenProps> = () => {
     <ModalFormContainer givenTitle="Sign In" onClose={handleClose}>
       <View style={styles.container}>
         <FieldInput
-          name="email"
+          name="mobile"
           defaultValues={defaultValues}
           methods={methods}
         />
         <FieldInput
-          name="password"
+          name="pin"
           defaultValues={defaultValues}
           methods={methods}
         />

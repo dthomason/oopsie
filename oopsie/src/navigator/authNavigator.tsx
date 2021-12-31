@@ -18,7 +18,6 @@ export type AuthParamList = {
   SignUp: undefined;
   ForgotPassword: undefined;
   Verify: {
-    email: string;
     mobile: string;
   };
 };

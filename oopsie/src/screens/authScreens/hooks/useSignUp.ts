@@ -5,7 +5,7 @@ import { FieldValues, UseFormSetError } from 'react-hook-form';
 import { configureAxios, isAxiosError, parsedAxiosError } from '../../../lib';
 import { AuthNavigation } from '../../../navigator';
 import * as api from '../../../sdk';
-import { SignUpRequest, SignUpResponse } from '../../../sdk/src/signUp';
+import { SignUpRequest, SignUpResponse } from '../../../sdk/src/user/create';
 import { useStore } from '../../../store';
 
 interface UseSignUp {
@@ -21,17 +21,15 @@ export const useSignUp = (
 
   const signUp = async (args: SignUpRequest): Promise<void> => {
     try {
-      const config = api.signUp.create({ ...args });
+      const config = api.user.create({ ...args });
       const { data } = await axios.request<SignUpResponse>(config);
 
       updateUserValues(data);
       setTypedValues({
-        email: '',
         mobile: '',
       });
 
       navigation.replace('Verify', {
-        email: data.email,
         mobile: data.mobile,
       });
     } catch (err) {
