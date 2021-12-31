@@ -1,14 +1,14 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 
-interface Config {
+interface Config extends AxiosRequestConfig {
   url: string;
   method: 'post' | 'get' | 'patch' | 'put';
   body: string;
   headers: string;
 }
 
-export const useAxios = ({ url, method, body, headers }: Config) => {
+export const useAxios = ({ url, method, body, headers, ...config }: Config) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);

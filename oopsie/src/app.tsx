@@ -12,7 +12,7 @@ import { AuthNavigator, AppNavigator } from './navigator';
 import { useStore } from './store';
 
 LogBox.ignoreLogs(['Redux']);
-// LogBox.ignoreAllLogs();
+LogBox.ignoreAllLogs(true);
 
 const App: FC = () => {
   const { refreshToken } = useRefresh();
