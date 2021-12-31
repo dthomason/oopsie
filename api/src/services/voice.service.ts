@@ -1,26 +1,17 @@
-import { Contact } from '@prisma/client';
 import { compare } from 'bcrypt';
+import { Request } from 'express';
+import VoiceResponse, {
+  GatherAttributes,
+} from 'twilio/lib/twiml/VoiceResponse';
 
-import { formatName } from '../utils';
+import { formatPhoneNumber, formatPin } from '../utils';
 
 import { ContactService } from './contact.service';
 import { UserService } from './user.service';
+import { dialog, findNameMatch } from './utils';
 
-export interface ConfiguredResponse {
-  contacts: Contact[];
-  script: string;
-}
-export interface Config {
-  active: string;
-  finishOnKey: string;
-  input: string[];
-  method: string;
-  speechModel: string;
-  speechTimeout: string;
-  timeout: number;
-}
-
-const gather = {
+const gatherConfig: GatherAttributes = {
+  action: '',
   finishOnKey: '#',
   input: ['dtmf', 'speech'],
   method: 'POST',
@@ -30,155 +21,212 @@ const gather = {
   timeout: 3,
 };
 
-export class VoiceService {
-  static async gather(req: Record<string, any>): Promise<Config | any> {
-    enum Gather {
-      Name = 'name',
-      Number = 'number',
-      Pin = 'pin',
+export type CallFlowStatus = 'number' | 'pin' | 'name';
+
+interface VoiceServiceResponse {
+  config: GatherAttributes;
+  script: string;
+}
+
+const gather = async (req: Request): Promise<VoiceServiceResponse> => {
+  const status = req.query?.type || '';
+
+  switch (status as CallFlowStatus) {
+    case 'pin': {
+      const { id } = req.params;
+
+      const { action, script, numDigits } = dialog({ id }).gatherPin;
+
+      const config: GatherAttributes = {
+        ...gatherConfig,
+        action,
+        numDigits,
+      };
+
+      const op = new VoiceResponse();
+
+      op.gather({ ...config }).say(script);
+
+      return { config, script };
     }
 
-    const status = req.query ? req.query.type : '';
-
-    if (status === Gather.Name) {
-      const id = req.params.id ? req.params.id : '';
+    case 'name': {
+      const { id } = req.params;
 
       const contacts = await ContactService.getUserContacts(id);
       const hints = contacts.map(({ firstName }) => firstName).join(', ');
 
-      const config = {
-        ...gather,
-        action: `/api/voice/lookup/${id}?type=name`,
-        hints: hints,
-      };
+      const { action, script } = dialog({ id }).gatherName;
 
-      const script = 'Say the name of who you are needing to reach';
+      const config = {
+        ...gatherConfig,
+        action,
+        hints,
+      };
 
       return { config, script };
     }
 
-    if (status === Gather.Pin) {
-      const id = req.params.id ? req.params.id : '';
+    default: {
+      const { action, script } = dialog().gatherNumber;
 
       const config = {
-        ...gather,
-        action: `/api/voice/lookup/${id}?type=pin`,
-        pin: 4,
+        ...gatherConfig,
+        action,
       };
-
-      const script =
-        'please enter your 4 digit pin number followed by the pound key';
-
-      return { config, script };
-    }
-
-    // Greeting
-    const config = {
-      ...gather,
-      action: '/api/voice/lookup?type=number',
-    };
-    const script =
-      'Hi, please enter your mobile number including area code finished by the pound key';
-
-    return { config, script };
-  }
-
-  // TODO: build better response types with a default so we always know the possible return
-  static async error(req: Record<string, any>): Promise<Config | any> {
-    enum ErrorType {
-      Name = 'name',
-      Number = 'number',
-      Pin = 'pin',
-    }
-
-    const status = req.query ? req.query.type : '';
-
-    if (status === ErrorType.Pin) {
-      const pin = req.query ? req.query.pin : '';
-      const id = req.params ? req.params.id : '';
-
-      const config = {
-        ...gather,
-        action: `/api/voice/lookup/${id}?type=pin`,
-      };
-      const script = `Sorry, the number ${pin} was not found.  Please enter it again`;
-
-      return { config, script };
-    }
-
-    if (status === ErrorType.Number) {
-      const mobile = req.query ? req.query.mobile : '';
-      const config = {
-        ...gather,
-        action: '/api/voice/lookup?type=number',
-      };
-      const script = `Sorry, the number ${mobile} was not found.  Please enter it again`;
-
-      return { config, script };
-    }
-
-    if (status === ErrorType.Name) {
-      const id = req.params ? req.params.id : '';
-
-      const config = {
-        ...gather,
-        action: `/api/voice/lookup/${id}?type=name`,
-      };
-      const script =
-        'Sorry I could not find anybody by that name, please try again';
 
       return { config, script };
     }
   }
+};
 
-  static async lookupPhone(mobile: string): Promise<string> {
-    const verified = await UserService.findByPhone(mobile);
+const lookup = async (req: Request): Promise<VoiceServiceResponse> => {
+  const status = req.query?.type;
 
-    if (verified) return `/api/voice/gather/${verified.id}?type=pin`;
+  switch (status as CallFlowStatus) {
+    case 'number': {
+      const { Digits } = req.body;
+      const found = await UserService.findByPhone(Digits);
 
-    return `/api/voice/error?type=number&mobile=${mobile}`;
-  }
+      const args = {
+        id: found.id,
+        found: !!found,
+        number: formatPhoneNumber(Digits),
+      };
+      const { action, script } = dialog(args).lookupNumber;
 
-  static async lookupPin(id: string, pin: string): Promise<string> {
-    const found = await UserService.findPinById(id);
+      const config = {
+        ...gatherConfig,
+        action,
+      };
 
-    if (found) {
-      const matchPin = await compare(pin, found.pin);
-
-      if (matchPin) return `/api/voice/gather/${id}?type=name`;
+      return { config, script };
     }
 
-    return `/api/voice/error/${id}?type=pin`;
-  }
+    case 'pin': {
+      const { Digits } = req.body;
+      const { id } = req.params;
+      const found = await UserService.findPinById(id);
+      const matchPin = await compare(formatPin(Digits), found.pin);
 
-  static async lookupName(id: string, name: string): Promise<any> {
-    const contacts = await ContactService.getUserContacts(id);
-    const cleaned = formatName(name);
-
-    const exact = contacts.filter(contact => contact.firstName === cleaned);
-
-    if (exact.length)
-      return {
-        contacts: exact,
-        say: 'We have found your exact contact',
-        redirect: exact[0].phoneNumbers[0].number,
+      const args = {
+        id,
+        found: !!matchPin,
       };
 
-    const contains = contacts.filter(contact =>
-      contact.firstName.includes(cleaned),
-    );
+      const { action, script } = dialog(args).lookupPin;
 
-    if (contains.length)
-      return {
-        contacts: contains,
-        say: 'We have found your contains contact',
-        redirect: contains[0].phoneNumbers[0].number,
+      const config = {
+        ...gatherConfig,
+        action,
       };
 
-    return {
-      contacts: [],
-      say: '',
-      redirect: `/api/voice/error/${id}?type=name`,
-    };
+      return { config, script };
+    }
+
+    case 'name': {
+      const { id } = req.params;
+      const contacts = await ContactService.getUserContacts(id);
+      const match = await findNameMatch(req.body.SpeechResult, contacts);
+      const number = match?.phoneNumbers[0].number || '';
+
+      const args = {
+        id,
+        found: !!match,
+        number: formatPhoneNumber(number),
+      };
+
+      const { action, script } = dialog(args).lookupName;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
+
+    default: {
+      const { action, script } = dialog().default;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
   }
-}
+};
+
+const error = async (req: Request): Promise<VoiceServiceResponse> => {
+  const status = req.query.type;
+
+  switch (status as CallFlowStatus) {
+    case 'number': {
+      const mobile = req.query.mobile?.toString() || '';
+
+      const args = {
+        number: mobile,
+      };
+
+      const { action, script } = dialog(args).errorNumber;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
+
+    case 'pin': {
+      const id = req.params?.id || '';
+      const pin = req.query?.pin?.toString() || '';
+
+      const args = {
+        id,
+        pin,
+      };
+
+      const { action, script } = dialog(args).errorPin;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
+
+    case 'name': {
+      const { id } = req.params;
+
+      const args = {
+        id,
+      };
+
+      const { action, script } = dialog(args).errorName;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
+
+    default: {
+      const { action, script } = dialog().default;
+
+      const config = {
+        ...gatherConfig,
+        action,
+      };
+
+      return { config, script };
+    }
+  }
+};
+
+export const Voice = { error, gather, lookup };

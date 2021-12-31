@@ -45,8 +45,6 @@ export async function buildup(commands: Command[]): Promise<void> {
 }
 
 interface UserBuilder {
-  email?: string;
-  password?: string;
   pin: string;
   mobile: string;
   verifiedEmail: boolean;

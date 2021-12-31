@@ -40,7 +40,6 @@ export const Verify: FC<AuthScreenProps> = ({ route }) => {
 
   const onSubmit = ({ code }: VerifyValues) => {
     const data = {
-      email: route.params?.email || '',
       mobile: route.params?.mobile || '',
       code: code,
     };

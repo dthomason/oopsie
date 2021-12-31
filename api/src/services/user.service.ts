@@ -6,7 +6,7 @@ import { formatPhoneNumber, formatPin, log, to } from '../utils';
 
 export interface UserProfile {
   id: string;
-  email: string;
+  email?: string;
   mobile: string;
   verifiedMobile: boolean;
 }

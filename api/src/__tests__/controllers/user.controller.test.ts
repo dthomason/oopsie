@@ -168,7 +168,7 @@ describe('POST /api/user/signin', () => {
     const message = 'Account not Found';
 
     it('returns 400 with message', async () => {
-      await request(app).post('/api/auth/signup').send(user).expect(200);
+      await request(app).post('/api/user').send(user).expect(200);
 
       const credentials = { mobile: '5553332222', pin: '4321' };
       const response = await request(app)
@@ -179,10 +179,6 @@ describe('POST /api/user/signin', () => {
       expect(response.body).toBe(message);
     });
   });
-
-  // describe('expired token', () => {
-  //   test('return 401 unauthorized');
-  // });
 });
 
 // Expired Token

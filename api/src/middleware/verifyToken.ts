@@ -7,7 +7,6 @@ import 'dotenv/config';
 
 const initialValues = {
   id: '',
-  email: '',
   mobile: '',
   verifiedMobile: false,
 };
@@ -24,7 +23,6 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as Secret;
 
 interface TokenParams extends JwtPayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
 }
@@ -58,7 +56,6 @@ export const verifyToken = (
 
     req.body.user = {
       id: decoded.id,
-      email: decoded.email,
       mobile: decoded.mobile,
       verifiedMobile: decoded.verifiedMobile,
     };

@@ -4,7 +4,6 @@ import { decodeToken } from '../store';
 
 interface UserValues {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
 }
@@ -25,15 +24,13 @@ export const validateToken = (cookie: string): ValidatedTokenResponse => {
     const now = new Date();
 
     if (expires && now < expires) {
-      const { exp, aud, id, email, mobile, verifiedMobile } =
-        decodeToken(value);
+      const { exp, aud, id, mobile, verifiedMobile } = decodeToken(value);
 
-      if (exp && now.getTime() < exp && aud === 'myPhone') {
+      if (exp && now.getTime() < exp && aud === 'oopsie-auth') {
         return {
           validToken: value,
           validData: {
             id,
-            email,
             mobile,
             verifiedMobile,
           },

@@ -2,9 +2,8 @@ import { compare } from 'bcrypt';
 import { Request } from 'express';
 import { Secret, sign } from 'jsonwebtoken';
 
-import { futureDate } from '../controllers';
 import { router } from '../routes';
-import { log, to } from '../utils';
+import { futureDate, log, to } from '../utils';
 
 import { UserProfile, UserService } from './user.service';
 import { checkVerification, startVerification } from './verifyMobile.service';

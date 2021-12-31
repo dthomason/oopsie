@@ -6,8 +6,7 @@ import { sortArray } from '../../lib';
 import db from '../../lib/db';
 import { UserService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
-import { contactBuilder, userBuilder } from '../../testHelpers';
-import { getAccessToken } from '../../testHelpers/getAccessToken';
+import { contactBuilder, userBuilder, getAccessToken } from '../../testHelpers';
 
 beforeEach(async () => {
   const mockedStart = jest.spyOn(service, 'startVerification');
@@ -35,8 +34,8 @@ describe('POST /api/contacts', () => {
     await UserService.create(newUser);
 
     const res = await request(app)
-      .post('/api/auth/signin')
-      .send({ email: newUser.email, password: newUser.password })
+      .post('/api/user/signin')
+      .send({ mobile: newUser.mobile, pin: newUser.pin })
       .expect(200);
 
     const { headers } = res;
@@ -89,13 +88,13 @@ describe('GET /api/contacts', () => {
     await UserService.create(newUser2);
 
     const res1 = await request(app)
-      .post('/api/auth/signin')
-      .send({ email: newUser1.email, password: newUser1.password })
+      .post('/api/user/signin')
+      .send({ mobile: newUser1.mobile, pin: newUser1.pin })
       .expect(200);
 
     const res2 = await request(app)
-      .post('/api/auth/signin')
-      .send({ email: newUser2.email, password: newUser2.password })
+      .post('/api/user/signin')
+      .send({ mobile: newUser2.mobile, pin: newUser2.pin })
       .expect(200);
 
     await request(app)

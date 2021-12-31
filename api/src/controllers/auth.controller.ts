@@ -3,10 +3,7 @@ import { Request, Response } from 'express';
 import { logger } from '../lib';
 import { router } from '../routes/routes';
 import AuthService from '../services/auth.service';
-
-export const futureDate = new Date(
-  Date.now() + 1000 /* sec */ * 60 /* min */ * 60 /* hour */ * 24 /* day */,
-);
+import { futureDate } from '../utils';
 
 const cookieConfig = {
   secure: process.env.NODE_ENV === 'prod',

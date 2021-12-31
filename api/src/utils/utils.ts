@@ -21,12 +21,12 @@ export async function to<R = AsyncResult, E = AsyncError>(
   }
 }
 
-export const log = (e: any, action: string, email?: string): void => {
+export const log = (e: any, action: string, mobile?: string): void => {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     if (e.code === 'P2002') {
       console.log(
         `${action}: Unique Constraint Violation, a user with email: ${
-          email ? email.toLowerCase() : 'unknown'
+          mobile ? formatPhoneNumber(mobile) : 'unknown'
         } already exists`,
       );
     }
@@ -117,3 +117,7 @@ export interface Cookie {
   secure?: boolean;
   httpOnly?: boolean;
 }
+
+export const futureDate = new Date(
+  Date.now() + 1000 /* sec */ * 60 /* min */ * 60 /* hour */ * 24 /* day */,
+);

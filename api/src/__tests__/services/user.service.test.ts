@@ -50,41 +50,28 @@ describe('#User Service', () => {
     });
   });
 
-  describe('#findByEmail', () => {
-    it('finds User by email', async () => {
-      const user = await UserService.create(userBuilder());
-      const userEmail = user?.email || '';
-
-      const found = await UserService.findByEmail(userEmail);
-
-      expect(userEmail).not.toBe('');
-
-      expect(found?.email).toBe(userEmail);
-    });
-  });
-
   describe('#update', () => {
-    describe('when updating an email', () => {
+    describe('when adding an email', () => {
       it('updates with the correct format', async () => {
         const user = await UserService.create(userBuilder());
-        const email = user.email;
-        const newEmail = faker.internet.email();
+        const mobile = user.mobile;
+        const newMobile = faker.phone.phoneNumberFormat(2);
 
-        expect(email).not.toBe('');
-        expect(email).not.toBe(newEmail);
+        expect(mobile).not.toBe('');
+        expect(mobile).not.toBe(newMobile);
 
-        await UserService.update(user.id, { email: newEmail });
+        await UserService.update(user.id, { mobile: newMobile });
 
         const updatedUser = await UserService.findById(user.id);
 
-        expect(updatedUser?.email).toBe(newEmail.toLowerCase());
+        expect(updatedUser?.mobile).toBe(formatPhoneNumber(newMobile));
       });
     });
 
     describe('when updating a mobile number', () => {
       it('updates with the correct format', async () => {
         const user = await UserService.create(userBuilder());
-        const mobile = faker.phone.phoneNumberFormat();
+        const mobile = faker.phone.phoneNumberFormat(2);
 
         await UserService.update(user.id, { mobile });
 
@@ -98,7 +85,7 @@ describe('#User Service', () => {
   describe('#findByPhone', () => {
     it('finds User by mobile', async () => {
       const user = await UserService.create(userBuilder());
-      const mobile = faker.phone.phoneNumberFormat();
+      const mobile = faker.phone.phoneNumberFormat(2);
 
       const formatted = formatPhoneNumber(mobile);
 
