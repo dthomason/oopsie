@@ -119,5 +119,11 @@ export interface Cookie {
 }
 
 export const futureDate = new Date(
-  Date.now() + 1000 /* sec */ * 60 /* min */ * 60 /* hour */ * 24 /* day */,
+  Date.now() +
+    1000 /* sec */ *
+      60 /* min */ *
+      60 /* hour */ *
+      24 /* day */ *
+      7 /* a week */ *
+      30 /* a month */,
 );

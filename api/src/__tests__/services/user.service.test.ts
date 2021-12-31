@@ -91,7 +91,7 @@ describe('#User Service', () => {
 
       await UserService.update(user.id, { mobile });
 
-      const userWithPhone = await UserService.findByPhone(formatted);
+      const userWithPhone = await UserService.findByMobile(formatted);
 
       expect(userWithPhone?.mobile).toBe(formatted);
     });

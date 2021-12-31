@@ -27,7 +27,7 @@ describe('VoiceController', () => {
 
   describe('#gather, caller number', () => {
     it('gathers the caller phone number', async () => {
-      await UserService.findByPhone(user.mobile);
+      await UserService.findByMobile(user.mobile);
 
       const res = await request(app).post('/api/voice/gather').expect(200);
 
@@ -38,7 +38,7 @@ describe('VoiceController', () => {
 
   describe('#gather, caller pin', () => {
     it('is gathered and redirects correctly', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
 
       const res = await request(app)
         .post(`/api/voice/gather/${caller?.id}?type=pin`)
@@ -52,7 +52,7 @@ describe('VoiceController', () => {
 
   describe('#gather, caller contact', () => {
     it('gather name of contact user needs', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
 
       const res = await request(app)
         .post(`/api/voice/gather/${caller?.id}?type=name`)
@@ -65,7 +65,7 @@ describe('VoiceController', () => {
 
   describe('#lookup, caller number', () => {
     it('is found and redirects correctly', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
 
       const res = await request(app)
         .post('/api/voice/lookup?type=number')
@@ -79,7 +79,7 @@ describe('VoiceController', () => {
 
   describe('#lookup, caller pin', () => {
     it('is found and redirects correctly', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
 
       const res = await request(app)
         .post(`/api/voice/lookup/${caller?.id}?type=pin`)
@@ -93,7 +93,7 @@ describe('VoiceController', () => {
 
   describe('#lookup, caller contact by name', () => {
     it('locates contact by name and dials', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
       const contacts = await ContactService.getUserContacts(
         caller ? caller.id : '',
       );
@@ -114,7 +114,7 @@ describe('VoiceController', () => {
 
   describe('#lookup, contains name', () => {
     it('locates contact by name and dials', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
       const contacts = await ContactService.getUserContacts(
         caller ? caller.id : '',
       );
@@ -138,7 +138,7 @@ describe('VoiceController', () => {
 
   describe('#lookup, special characters name', () => {
     it('locates contact by name and dials', async () => {
-      const caller = await UserService.findByPhone(user.mobile);
+      const caller = await UserService.findByMobile(user.mobile);
       const contacts = await ContactService.getUserContacts(
         caller ? caller.id : '',
       );
@@ -191,7 +191,7 @@ describe('VoiceController', () => {
 
   describe('#error, caller find by spoken name', () => {
     it('repeats same gather once', async () => {
-      const found = await UserService.findByPhone(user.mobile);
+      const found = await UserService.findByMobile(user.mobile);
 
       const res = await request(app)
         .post(`/api/voice/error/${found.id}?type=name`)

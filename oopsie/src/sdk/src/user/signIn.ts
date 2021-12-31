@@ -1,8 +1,9 @@
 import { AxiosRequestConfig } from 'axios';
+import { CountryCode } from 'react-native-country-picker-modal';
 
 interface CreateRequest {
+  countryCode: CountryCode;
   mobile: string;
-  pin: string;
 }
 
 interface CreateConfig extends AxiosRequestConfig {

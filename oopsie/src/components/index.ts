@@ -6,3 +6,5 @@ export * from './gradientButton';
 export * from './modalFormContainer';
 export * from './headerAppBar';
 export * from './fieldInput';
+export * from './fieldNames';
+export * from './countryCodeInput';

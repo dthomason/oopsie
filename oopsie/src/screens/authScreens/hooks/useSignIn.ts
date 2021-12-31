@@ -8,7 +8,7 @@ import { AuthNavigation } from '../../../navigator';
 import * as api from '../../../sdk';
 import { SignInRequest, SignInResponse } from '../../../sdk/src/user/signIn';
 import { useStore } from '../../../store';
-import { isAxiosError } from '../../../utils';
+import { isAxiosError, isValidNumber } from '../../../utils';
 
 interface UseSignIn {
   signIn: (args: SignInRequest) => Promise<void>;
@@ -24,6 +24,15 @@ export const useSignIn = (
 
   const signIn = async (args: SignInRequest): Promise<void> => {
     try {
+      const { mobile, countryCode } = args;
+      const isValid = isValidNumber(mobile, countryCode);
+
+      if (!isValid) {
+        setError('mobile', { message: 'Not a valid mobile number' });
+
+        return;
+      }
+
       const config = api.user.signIn({ ...args });
 
       configureAxios({ withCredentials: true });

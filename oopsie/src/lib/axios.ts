@@ -8,7 +8,7 @@ export const isAxiosError = <T = unknown>(
   error instanceof Error && !!(error as AxiosError).isAxiosError;
 
 interface ParsedError {
-  status: number | string;
+  status: number;
   error: string;
 }
 

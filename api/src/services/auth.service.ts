@@ -1,9 +1,8 @@
-import { compare } from 'bcrypt';
 import { Request } from 'express';
 import { Secret, sign } from 'jsonwebtoken';
 
 import { router } from '../routes';
-import { futureDate, log, to } from '../utils';
+import { futureDate, log } from '../utils';
 
 import { UserProfile, UserService } from './user.service';
 import { checkVerification, startVerification } from './verifyMobile.service';
@@ -21,9 +20,9 @@ class AuthService {
   public router = router;
 
   static async validateThenCreate(req: Request): Promise<ValidationResponse> {
-    const { mobile, pin } = req.body;
+    const { mobile, countryCode } = req.body;
 
-    if (!(mobile && pin)) {
+    if (!(mobile && countryCode)) {
       return {
         conflict: 400,
         message: 'All input is required',
@@ -31,7 +30,7 @@ class AuthService {
       };
     }
 
-    const foundUser = await UserService.findByPhone(mobile);
+    const foundUser = await UserService.findByMobile(mobile);
 
     if (foundUser) {
       return {
@@ -42,8 +41,8 @@ class AuthService {
     }
 
     const created = await UserService.create({
+      countryCode,
       mobile,
-      pin,
       verifiedEmail: false,
       verifiedMobile: false,
     });
@@ -79,36 +78,23 @@ class AuthService {
   }
 
   static async validateSignin(req: Request): Promise<ValidationResponse> {
-    const { mobile, pin } = req.body;
+    const { mobile, countryCode } = req.body;
 
-    if (!(mobile && pin)) {
+    if (!(mobile && countryCode)) {
       return {
         conflict: 400,
-        message: 'All input is required',
+        message: 'Bad Request, check your entry and try again',
         user: req.body,
       };
     }
 
-    const signingUser = await UserService.findByPhone(mobile);
+    const signingUser = await UserService.findByMobile(mobile);
 
     if (!signingUser)
       return {
         conflict: 400,
         message: 'Account not Found',
         user: req.body,
-      };
-
-    const hash = await UserService.findPinByMobile(mobile);
-
-    const [match, err] = await to(compare(pin, hash.pin));
-
-    if (err) log(err, 'Compare failed');
-
-    if (!match)
-      return {
-        conflict: 400,
-        message: 'That username and password were not found',
-        user: mobile,
       };
 
     await UserService.update(signingUser.id, { verifiedMobile: false });
@@ -134,7 +120,7 @@ class AuthService {
       };
     }
 
-    const signingUser = await UserService.findByPhone(mobile);
+    const signingUser = await UserService.findByMobile(mobile);
 
     if (!signingUser)
       return {
@@ -190,3 +176,17 @@ class AuthService {
 }
 
 export default AuthService;
+
+// TODO: use for 2-factor auth
+//       const hash = await UserService.findPinByMobile(mobile);
+//
+//       const [match, err] = await to(compare(pin, hash.pin));
+//
+//       if (err) log(err, 'Compare failed');
+//
+//       if (!match)
+//         return {
+//           conflict: 400,
+//           message: 'That username and password were not found',
+//           user: mobile,
+//         };

@@ -1,104 +1,19 @@
-import React, { useEffect, FC } from 'react';
+import React, { useEffect, FC, useState } from 'react';
 import {
   useController,
   FieldValues,
   FieldName,
   UseFormReturn,
 } from 'react-hook-form';
-import { KeyboardType, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Input } from 'react-native-elements';
 
 import { useCustomTheme } from '../hooks';
 import { useStore } from '../store';
-import { TextContentType } from '../utils';
 
-interface TextTypes {
-  keyboardType: KeyboardType;
-  placeholder: string;
-  secureText: boolean;
-  textContentType: TextContentType;
-  max?: number;
-}
+import { getType } from './fieldNames';
 
-interface FieldNames {
-  [key: string]: TextTypes;
-}
-
-const textTypes: Record<string, TextTypes> = {
-  email: {
-    keyboardType: 'email-address',
-    placeholder: 'Email Address',
-    secureText: false,
-    textContentType: 'emailAddress',
-  },
-  password: {
-    keyboardType: 'default',
-    placeholder: 'Password',
-    secureText: true,
-    textContentType: 'password',
-  },
-  mobile: {
-    keyboardType: 'phone-pad',
-    placeholder: 'Mobile Number',
-    secureText: false,
-    textContentType: 'telephoneNumber',
-  },
-  pin: {
-    keyboardType: 'number-pad',
-    max: 4,
-    placeholder: 'Pin Number',
-    secureText: true,
-    textContentType: 'none',
-  },
-  newPin: {
-    keyboardType: 'number-pad',
-    max: 4,
-    placeholder: '4 Digit PIN Number',
-    secureText: true,
-    textContentType: 'none',
-  },
-  confirmPin: {
-    keyboardType: 'number-pad',
-    max: 4,
-    placeholder: 'Confirm PIN',
-    secureText: true,
-    textContentType: 'none',
-  },
-  newPassword: {
-    keyboardType: 'default',
-    placeholder: 'Password',
-    secureText: true,
-    textContentType: 'newPassword',
-  },
-  secondary: {
-    keyboardType: 'default',
-    placeholder: 'Confirm Password',
-    secureText: true,
-    textContentType: 'newPassword',
-  },
-  code: {
-    keyboardType: 'numeric',
-    placeholder: 'Verification Code',
-    secureText: false,
-    textContentType: 'oneTimeCode',
-  },
-  default: {
-    keyboardType: 'default',
-    placeholder: 'Default',
-    secureText: false,
-    textContentType: 'none',
-  },
-} as FieldNames;
-
-const getType = (name: keyof FieldNames): TextTypes => {
-  if (!textTypes[name]) {
-    return textTypes['default'];
-  } else {
-    return textTypes[name];
-  }
-};
-
-const storeTypes = ['mobile', 'email'];
+const storeTypes = ['mobile', 'countryCode'];
 
 interface InputProps {
   defaultValues: FieldValues;
@@ -111,6 +26,7 @@ export const FieldInput: FC<InputProps> = ({
   name,
   methods: { control, setFocus, clearErrors },
 }) => {
+  // const [showAccessView, setShowAccessView] = useState(false);
   const setTypedValues = useStore(state => state.setTypedValues);
   const {
     theme: { colors },
@@ -123,6 +39,8 @@ export const FieldInput: FC<InputProps> = ({
     defaultValue: '',
     name,
   });
+
+  console.log({ error });
 
   const fieldsArray = Object.keys(defaultValues).map(key => key);
 
@@ -155,7 +73,8 @@ export const FieldInput: FC<InputProps> = ({
         blurOnSubmit={isLast}
         clearButtonMode="unless-editing"
         enablesReturnKeyAutomatically={true}
-        errorMessage={error && error.message ? error.message : ''}
+        errorMessage={error ? error.message : ''}
+        inputAccessoryViewID={'none'}
         inputStyle={{ color: colors.text }}
         keyboardType={getType(name).keyboardType}
         maxLength={getType(name).max || 40}

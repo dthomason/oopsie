@@ -35,8 +35,6 @@ export const useVerifyMobile = (
       const { data, headers } = await axios.request(config);
       const { validToken, validData } = validateToken(headers['set-cookie']);
 
-      console.log({ validToken, validData });
-
       if (data.verifiedMobile && validToken && validData) {
         setToken(validToken);
         updateUserValues(validData);

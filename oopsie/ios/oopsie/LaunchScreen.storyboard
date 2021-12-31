@@ -22,8 +22,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="Brand_Icon" translatesAutoresizingMaskIntoConstraints="NO" id="f0r-U2-5jf">
-                                <rect key="frame" x="118" y="224" width="148" height="132"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="Brand_Icon_blue" translatesAutoresizingMaskIntoConstraints="NO" id="eNQ-ob-GZz">
+                                <rect key="frame" x="117" y="219" width="140" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -42,7 +42,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Brand_Icon" width="1080" height="1080"/>
+        <image name="Brand_Icon_blue" width="1080" height="1080"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -45,7 +45,8 @@ export async function buildup(commands: Command[]): Promise<void> {
 }
 
 interface UserBuilder {
-  pin: string;
+  pin?: string;
+  countryCode: string;
   mobile: string;
   verifiedEmail: boolean;
   verifiedMobile: boolean;
@@ -54,8 +55,9 @@ interface UserBuilder {
 export const userBuilder = build<UserBuilder>({
   fields: {
     // email: fake(f => String(f.internet.email())),
-    // password: 'this Test P@ssW0$d',
-    pin: '1234',
+    // password: 'this  Test P@ssW0$d',
+    countryCode: fake(f => String(f.address.countryCode())),
+    // pin: '1234',
     mobile: fake(f => String(f.phone.phoneNumberFormat(2))),
     verifiedEmail: fake(() => false),
     verifiedMobile: fake(() => false),

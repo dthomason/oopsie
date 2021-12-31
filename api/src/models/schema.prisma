@@ -12,14 +12,15 @@ generator client {
 
 model User {
   id             String    @id @unique @default(cuid())
+  countryCode     String    @db.VarChar(10)
   email          String?   @unique @db.VarChar(255)
   firstName      String?   @db.VarChar(255)
   lastName       String?   @db.VarChar(255)
-  mobile         String    @unique @db.VarChar(10)
+  mobile         String    @unique @db.VarChar(15)
   verifiedMobile Boolean   @db.Boolean
   verifiedEmail  Boolean   @db.Boolean
   password       String?   @db.VarChar(255)
-  pin            String    @db.VarChar(255)
+  pin            String?    @db.VarChar(255)
   contacts       Contact[]
 }
 

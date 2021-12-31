@@ -1,35 +1,40 @@
 import { Prisma } from '@prisma/client';
-import { hash } from 'bcrypt';
 
 import db from '../lib/db';
-import { formatPhoneNumber, formatPin, log, to } from '../utils';
+import { formatPhoneNumber, log, to } from '../utils';
 
 export interface UserProfile {
   id: string;
+  countryCode: string;
   email?: string;
   mobile: string;
   verifiedMobile: boolean;
 }
 
 interface CreateInput {
+  countryCode: string;
   mobile: string;
-  pin: string;
   verifiedMobile: boolean;
   verifiedEmail: boolean;
 }
 
 const select = Prisma.validator<Prisma.UserSelect>()({
   id: true,
+  countryCode: true,
   mobile: true,
   verifiedMobile: true,
 });
 
-const create = async ({ mobile, pin }: CreateInput): Promise<UserProfile> => {
+const create = async ({
+  countryCode,
+  mobile,
+}: CreateInput): Promise<UserProfile> => {
   const data = Prisma.validator<CreateInput>()({
+    countryCode: countryCode,
     verifiedEmail: false,
     verifiedMobile: false,
     mobile: formatPhoneNumber(mobile),
-    pin: await hash(formatPin(pin), 10),
+    // pin: await hash(formatPin(pin), 10),
   });
 
   const [user, err] = await to(
@@ -75,7 +80,7 @@ const findById = async (id: string): Promise<UserProfile> => {
   return user;
 };
 
-const findByPhone = async (mobile: string): Promise<UserProfile> => {
+const findByMobile = async (mobile: string): Promise<UserProfile> => {
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
     mobile: formatPhoneNumber(mobile),
   });
@@ -171,7 +176,7 @@ export const UserService = {
   create,
   findByEmail,
   findById,
-  findByPhone,
+  findByMobile: findByMobile,
   findPasswordByEmail,
   findPinByMobile,
   findPinById,

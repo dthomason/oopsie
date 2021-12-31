@@ -1,15 +1,16 @@
 import { AxiosRequestConfig } from 'axios';
+import { CountryCode } from 'react-native-country-picker-modal';
 
 interface CreateRequest {
+  countryCode: CountryCode;
   mobile: string;
-  pin: string;
 }
 
 interface CreateConfig extends AxiosRequestConfig {
   body: CreateRequest;
   data: CreateRequest;
   method: 'POST';
-  url: '/api/user/signup';
+  url: '/api/user';
 }
 
 interface ResponsePayload {
@@ -22,14 +23,14 @@ export type SignUpRequest = CreateRequest;
 export type SignUpResponse = ResponsePayload;
 
 /**
- * POST `/api/auth/signup
+ * POST `/api/user
  *
- * { mobile: string, pin: string }
+ * { mobile: string, countryCode: CountryCode }
  */
 export const create = (data: CreateRequest): CreateConfig => {
   return {
     method: 'POST',
-    url: '/api/user/signup',
+    url: '/api/user',
     body: data,
     data,
   } as const;

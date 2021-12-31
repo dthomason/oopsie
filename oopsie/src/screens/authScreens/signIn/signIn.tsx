@@ -12,23 +12,23 @@ import {
 } from '../../../components';
 import { schemaOptions as validate } from '../../../lib';
 import { AuthNavigation, AuthScreenProps } from '../../../navigator';
+import { CountryCode } from 'react-native-country-picker-modal';
 import { SignInRequest } from '../../../sdk/src/user/signIn';
 import { useStore } from '../../../store';
 import { useSignIn } from '../hooks';
 
-const validationSchema = yup.object().shape({
-  email: validate.email,
-  password: validate.password,
-});
+// const validationSchema = yup.object().shape({
+//   mobile: '',
+// });
 
-interface SignInValues {
-  email: string;
-  password: string;
+interface FormValues {
+  countryCode: CountryCode;
+  mobile: string;
 }
 
-const defaultValues: SignInValues = {
-  email: '',
-  password: '',
+const defaultValues: FormValues = {
+  countryCode: 'US',
+  mobile: '',
 };
 
 export const SignIn: FC<AuthScreenProps> = () => {
@@ -36,7 +36,7 @@ export const SignIn: FC<AuthScreenProps> = () => {
   const navigation = useNavigation<AuthNavigation>();
   const { setValue, handleSubmit, setError, ...methods } = useForm<FieldValues>(
     {
-      resolver: yupResolver(validationSchema),
+      // resolver: yupResolver(validationSchema),
     },
   );
   const { signIn } = useSignIn(setError);

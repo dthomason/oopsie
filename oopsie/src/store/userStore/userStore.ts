@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import decode, { JwtPayload } from 'jwt-decode';
 import create, { GetState, SetState } from 'zustand';
+import { CountryCode } from 'react-native-country-picker-modal';
 import {
   devtools,
   persist,
@@ -53,12 +54,14 @@ export interface UserStore {
   signedIn: boolean;
   token: string;
   successfulSync: boolean;
+  countryCode: CountryCode;
   currentStamp: string;
   tokenExpired: boolean;
   typedValues: TypedValues;
   userValues: InputUserValues;
   permissions: Permissions;
   recordIDs: string[];
+  setCountryCode: (countryCode: CountryCode) => void;
   setCurrentStamp: (stamp: string) => void;
   setSuccessfulSync: (result: boolean) => void;
   setTypedValues: (typed: TypedValues) => void;
@@ -80,6 +83,7 @@ export const useStore = create<
     persist(
       im(set => ({
         currentStamp: '',
+        countryCode: 'US',
         error: '',
         hasHydrated: false,
         isDark: false,
@@ -92,6 +96,7 @@ export const useStore = create<
         tokenExpired: true,
         typedValues: {},
         userValues: {},
+        setCountryCode: (countryCode: CountryCode) => set({ countryCode }),
         setCurrentStamp: (stamp: string) => set({ currentStamp: stamp }),
         setSuccessfulSync: (result: boolean) => set({ successfulSync: result }),
         setDarkMode: (dark: boolean) => set({ isDark: dark }),

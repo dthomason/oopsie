@@ -6,9 +6,10 @@ import { useCustomTheme } from '../hooks';
 
 interface Props {
   onPress: () => void;
+  disabled?: boolean;
 }
 
-export const GradientButton: FC<Props> = ({ onPress }) => {
+export const GradientButton: FC<Props> = ({ onPress, disabled }) => {
   const { theme } = useCustomTheme();
   const { colors } = theme;
 
@@ -32,6 +33,7 @@ export const GradientButton: FC<Props> = ({ onPress }) => {
 
   return (
     <Button
+      disabled={disabled}
       ViewComponent={LinearGradient}
       linearGradientProps={gradient}
       type="outline"

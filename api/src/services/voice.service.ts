@@ -86,7 +86,7 @@ const lookup = async (req: Request): Promise<VoiceServiceResponse> => {
   switch (status as CallFlowStatus) {
     case 'number': {
       const { Digits } = req.body;
-      const found = await UserService.findByPhone(Digits);
+      const found = await UserService.findByMobile(Digits);
 
       const args = {
         id: found.id,

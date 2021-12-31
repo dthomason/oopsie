@@ -41,7 +41,7 @@ const DefaultElements = {
     secondary: '#6AD45E',
     white: white,
     black: black,
-    card: colors.grey5,
+    card: '#D1D4D8',
     background: white,
     border: colors.grey4,
     text: black,

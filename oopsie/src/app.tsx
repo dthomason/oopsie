@@ -40,11 +40,11 @@ const App: FC = () => {
   }, [isLoading, refreshToken, signedIn]);
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
         {isLoading ? (
           <View style={styles.loading}>
-            <BrandIcon color={iconColor} size={110} />
+            <BrandIcon color={iconColor} size={140} />
           </View>
         ) : (
           <ThemeProvider theme={theme}>
@@ -53,13 +53,18 @@ const App: FC = () => {
             </NavigationContainer>
           </ThemeProvider>
         )}
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
 export default App;
 
 const styles = StyleSheet.create({
-  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 90,
+  },
 });
