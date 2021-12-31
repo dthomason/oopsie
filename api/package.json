@@ -30,6 +30,7 @@
     "body-parser": "^1.19.0",
     "chalk": "4.1.0",
     "cookie-parser": "^1.4.6",
+    "crypto-extra": "^1.0.1",
     "express": "^4.17.1",
     "express-async-handler": "^1.2.0",
     "immer": "^9.0.2",

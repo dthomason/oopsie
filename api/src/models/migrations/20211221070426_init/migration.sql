@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "pin" SET DATA TYPE VARCHAR(255);

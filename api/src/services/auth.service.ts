@@ -1,3 +1,4 @@
+import crypto from 'crypto-extra';
 import { Request } from 'express';
 import { Secret, sign } from 'jsonwebtoken';
 
