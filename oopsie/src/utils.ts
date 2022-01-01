@@ -1,10 +1,6 @@
 import { AxiosError } from 'axios';
-import { PhoneNumberUtil } from 'google-libphonenumber';
-import { CountryCode } from 'react-native-country-picker-modal';
 import { Input } from 'react-native-elements';
 import setCookie from 'set-cookie-parser';
-
-const phoneUtil = PhoneNumberUtil.getInstance();
 
 export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -74,16 +70,3 @@ export type TextContentType =
   | 'newPassword'
   | 'oneTimeCode'
   | undefined;
-
-export const isValidNumber = (
-  number: string,
-  countryCode: CountryCode,
-): boolean => {
-  try {
-    const parsedNumber = phoneUtil.parse(number, countryCode);
-
-    return phoneUtil.isValidNumber(parsedNumber);
-  } catch (err) {
-    return false;
-  }
-};

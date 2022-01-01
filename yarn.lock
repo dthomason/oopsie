@@ -1993,6 +1993,11 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
+awesome-phonenumber@^2.66.0:
+  version "2.66.0"
+  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-2.66.0.tgz#b3198131117935fd313625304e1f2c42dd725f47"
+  integrity sha512-mC3+t8KAvodwQFSt4j63g+rNSjZf3+5CrVOduANB3JkCFN6LWsmJGLqBtW3F7S1J35hutoYKLwbCBHT7VtO1gQ==
+
 axios@^0.21.4:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"

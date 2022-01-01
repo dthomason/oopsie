@@ -61,7 +61,7 @@ const DarkElements = {
     secondary: '#6AD45E',
     white: white,
     black: black,
-    card: '#151515',
+    card: '#2B2B2B',
     background: black,
     text: white,
     border: colors.grey0,

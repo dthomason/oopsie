@@ -12,18 +12,35 @@ generator client {
 
 model User {
   id               String    @id @unique @default(cuid())
-  contacts         Contact[]
+  // unique identifiers creation entities
   countryCode      String    @db.VarChar(10)
+  mobile           String    @unique @db.VarChar(15)
+  // by hashing the deviceId and firstInstallTime we get a unique userHash
   deviceId         String?   @db.VarChar(255)
-  email            String?   @unique @db.VarChar(255)
   firstInstallTime Int?      @db.Integer
+  // secondary id's that can be retrieved later
+  email            String?   @unique @db.VarChar(255)
   firstName        String?   @db.VarChar(255)
   lastName         String?   @db.VarChar(255)
-  mobile           String    @unique @db.VarChar(15)
   pin              String?   @db.VarChar(255)
-  session          String?   @unique @db.VarChar(255)
-  verifiedEmail    Boolean   @db.Boolean
-  verifiedMobile   Boolean   @db.Boolean
+  dualAuth         Boolean   @default(false) @db.Boolean
+  verifiedEmail    Boolean   @default(false) @db.Boolean
+  verifiedMobile   Boolean   @default(false) @db.Boolean
+  // relations
+  tokens           Token[]
+  contacts         Contact[]
+}
+
+model Token {
+  id         String    @id @unique @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  type       TokenType
+  tempToken  String?   @unique // Only used for short lived processes like signup
+  valid      Boolean   @default(true)
+  expiration DateTime
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
 }
 
 model Contact {
@@ -41,4 +58,9 @@ model Contact {
 enum Role {
   USER
   ADMIN
+}
+
+enum TokenType {
+  TEMP
+  API
 }

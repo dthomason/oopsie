@@ -2,18 +2,19 @@ import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import CountryPicker, {
   Country,
+  CountryCode,
   DARK_THEME,
   DEFAULT_THEME,
 } from 'react-native-country-picker-modal';
-import shallow from 'zustand/shallow';
 
 import { useStore } from '../store';
 
-export const CountryCodeInput: FC = ({ children }) => {
-  const [countryCode, setCountryCode] = useStore(
-    state => [state.countryCode, state.setCountryCode],
-    shallow,
-  );
+interface Props {
+  countryCode: CountryCode;
+}
+
+export const CountryCodeInput: FC<Props> = ({ countryCode, children }) => {
+  const setCountryCode = useStore(state => state.setCountryCode);
   const isDark = useStore(state => state.isDark);
 
   const darkMode = isDark ? DARK_THEME : DEFAULT_THEME;
@@ -28,15 +29,13 @@ export const CountryCodeInput: FC = ({ children }) => {
         countryCode={countryCode}
         withFilter
         withFlag
+        withFlagButton
         withAlphaFilter
         withCallingCode
         withCallingCodeButton
         onSelect={e => handleSelect(e)}
-        containerButtonStyle={{
-          width: '100%',
-          paddingBottom: 30,
-        }}
-        withEmoji={false}
+        containerButtonStyle={styles.button}
+        withEmoji
         preferredCountries={['US', 'CA']}
         theme={darkMode}
       />
@@ -49,5 +48,10 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
+  },
+  button: {
+    width: '100%',
+    paddingHorizontal: 4,
+    height: 50,
   },
 });

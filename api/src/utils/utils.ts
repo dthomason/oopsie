@@ -82,7 +82,6 @@ interface Normalize {
   email: string;
   firstName: string;
   lastName: string;
-  password: string;
   mobile?: string;
   pin?: number;
 }
@@ -91,7 +90,6 @@ export const normalize = ({
   email,
   firstName,
   lastName,
-  password,
   mobile,
   pin,
 }: Normalize): Normalize => {
@@ -99,7 +97,6 @@ export const normalize = ({
     firstName: firstName.toLowerCase().trim(),
     lastName: lastName.toLowerCase().trim(),
     email: email.toLowerCase().trim(),
-    password,
     mobile: mobile ? formatPhoneNumber(mobile) : '',
     pin,
   };

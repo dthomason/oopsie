@@ -97,28 +97,6 @@ const findByMobile = async (mobile: string): Promise<UserProfile> => {
   return user;
 };
 
-const findPasswordByEmail = async (
-  email: string,
-): Promise<{ password: string }> => {
-  const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
-    email: email.toLowerCase().trim(),
-  });
-  const selectPassword = Prisma.validator<Prisma.UserSelect>()({
-    password: true,
-  });
-
-  const [user, err] = await to(
-    db.user.findUnique({
-      where,
-      select: selectPassword,
-    }),
-  );
-
-  if (err) log(err, 'User.findPasswordByEmail', email);
-
-  return user;
-};
-
 const findPinByMobile = async (mobile: string): Promise<{ pin: string }> => {
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
     mobile: formatPhoneNumber(mobile),
@@ -177,7 +155,6 @@ export const UserService = {
   findByEmail,
   findById,
   findByMobile: findByMobile,
-  findPasswordByEmail,
   findPinByMobile,
   findPinById,
   update,

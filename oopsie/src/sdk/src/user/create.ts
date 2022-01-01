@@ -4,6 +4,7 @@ import { CountryCode } from 'react-native-country-picker-modal';
 interface CreateRequest {
   countryCode: CountryCode;
   mobile: string;
+  deviceId: string;
 }
 
 interface CreateConfig extends AxiosRequestConfig {

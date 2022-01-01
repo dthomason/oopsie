@@ -40,8 +40,6 @@ export const FieldInput: FC<InputProps> = ({
     name,
   });
 
-  console.log({ error });
-
   const fieldsArray = Object.keys(defaultValues).map(key => key);
 
   const isFirst = fieldsArray[0] === name;

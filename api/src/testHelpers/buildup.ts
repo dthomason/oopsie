@@ -2,7 +2,9 @@ import { build, fake } from '@jackfranklin/test-data-bot';
 import faker from 'faker/locale/en_US';
 import { times } from 'lodash';
 
-import { UserService } from '../services/user.service';
+import { CountryCode } from '../../@types/types';
+
+faker.setLocale('en_US');
 
 interface EmailAddress {
   label: string;
@@ -22,45 +24,22 @@ export type BuildContact = {
   recordID: string;
 };
 
-interface UserCommand {
-  args?: BuildUser;
-  type: 'user';
-}
-
-interface UserWithContactsCommand {
-  args: BuildUser;
-  type: 'user-with-contacts';
-}
-
-faker.setLocale('en_US');
-
-type Command = UserCommand | UserWithContactsCommand;
-
-export async function buildup(commands: Command[]): Promise<void> {
-  commands.forEach(command => {
-    if (command.type === 'user') {
-      buildUser(command.args);
-    }
-  });
-}
-
 interface UserBuilder {
-  pin?: string;
-  countryCode: string;
+  countryCode: CountryCode;
+  deviceId: string;
+  firstInstallTime?: number;
   mobile: string;
-  verifiedEmail: boolean;
   verifiedMobile: boolean;
 }
 
 export const userBuilder = build<UserBuilder>({
   fields: {
-    // email: fake(f => String(f.internet.email())),
-    // password: 'this  Test P@ssW0$d',
-    countryCode: fake(f => String(f.address.countryCode())),
-    // pin: '1234',
+    // countryCode: fake(f => String(f.address.countryCode())),
+    countryCode: 'US',
+    deviceId: fake(f => String(f.datatype.uuid())),
     mobile: fake(f => String(f.phone.phoneNumberFormat(2))),
-    verifiedEmail: fake(() => false),
     verifiedMobile: fake(() => false),
+    firstInstallTime: fake(f => Number(f.datatype.datetime())),
   },
 });
 
@@ -68,17 +47,6 @@ export type BuildUser = {
   user?: UserBuilder;
   contacts?: BuildContact[];
 };
-
-async function buildUser({ user }: BuildUser = {}): Promise<void> {
-  const builtUser = user
-    ? user
-    : {
-        ...userBuilder(),
-        verifiedMobile: true,
-      };
-
-  await UserService.create(builtUser);
-}
 
 const labels = ['home', 'mobile'];
 

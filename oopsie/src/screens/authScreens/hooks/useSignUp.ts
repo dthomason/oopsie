@@ -21,9 +21,6 @@ export const useSignUp = (
 
   const signUp = async (args: SignUpRequest): Promise<void> => {
     try {
-      const { mobile, countryCode } = args;
-
-      console.log({ mobile, countryCode });
       const config = api.user.create({ ...args });
       const { data } = await axios.request<SignUpResponse>(config);
 

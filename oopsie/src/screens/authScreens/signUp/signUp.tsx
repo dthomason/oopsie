@@ -1,18 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
+import PhoneNumber from 'awesome-phonenumber';
 import React, { FC, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { View, StyleSheet, InputAccessoryView, Button } from 'react-native';
 import { CountryCode } from 'react-native-country-picker-modal';
+import { getDeviceId } from 'react-native-device-info';
 import { Text } from 'react-native-elements';
 import * as yup from 'yup';
 
 import {
-  FieldInput,
   GradientButton,
+  MobileInput,
   ModalFormContainer,
 } from '../../../components';
-import { CountryCodeInput } from '../../../components/countryCodeInput';
 import { useCustomTheme } from '../../../hooks';
 import { schemaOptions as validate } from '../../../lib';
 import { AuthNavigation, AuthScreenProps } from '../../../navigator';
@@ -52,9 +53,19 @@ export const SignUp: FC<AuthScreenProps> = () => {
   };
 
   const onSubmit = (args: FormValues) => {
+    const phoneUtil = new PhoneNumber(args.mobile, countryCode);
+    const deviceId = getDeviceId();
+
+    if (!phoneUtil.isValid()) {
+      setError('mobile', { message: 'Invalid Phone Number' });
+
+      return;
+    }
+
     const data = {
       countryCode: countryCode,
-      mobile: args.mobile,
+      deviceId,
+      mobile: phoneUtil.getNumber('e164'),
     };
 
     signUp(data);
@@ -77,13 +88,11 @@ export const SignUp: FC<AuthScreenProps> = () => {
         country and enter your phone number
       </Text>
       <View style={styles.container}>
-        <CountryCodeInput>
-          <FieldInput
-            name="mobile"
-            defaultValues={defaultValues}
-            methods={methods}
-          />
-        </CountryCodeInput>
+        <MobileInput
+          defaultValues={defaultValues}
+          methods={methods}
+          name="mobile"
+        />
 
         <GradientButton onPress={handleSubmit(onSubmit)} />
       </View>
@@ -109,7 +118,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    fontSize: 16,
+    fontSize: 18,
     width: '90%',
     textAlign: 'center',
     padding: 8,

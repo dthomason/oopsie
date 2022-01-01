@@ -8,3 +8,4 @@ export * from './headerAppBar';
 export * from './fieldInput';
 export * from './fieldNames';
 export * from './countryCodeInput';
+export * from './mobileInput';

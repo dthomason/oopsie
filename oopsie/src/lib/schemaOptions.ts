@@ -47,13 +47,7 @@ export const schemaOptions = {
     .email()
     .required(requiredMessage)
     .matches(emailReg, invalidMessage),
-  mobile: yup
-    .string()
-    .label('10')
-    .default('')
-    .required(requiredMessage)
-    .min(10, minimumDigits)
-    .matches(/^[0-9]+$/, invalidMessage),
+  mobile: yup.string().label('10').default('').min(10, minimumDigits),
   password: yup
     .string()
     .label('Password')
