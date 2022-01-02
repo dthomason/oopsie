@@ -26,7 +26,7 @@ export const log = (e: any, action: string, mobile?: string): void => {
     if (e.code === 'P2002') {
       console.log(
         `${action}: Unique Constraint Violation, a user with email: ${
-          mobile ? formatPhoneNumber(mobile) : 'unknown'
+          mobile ? mobile : 'unknown'
         } already exists`,
       );
     }
@@ -97,7 +97,7 @@ export const normalize = ({
     firstName: firstName.toLowerCase().trim(),
     lastName: lastName.toLowerCase().trim(),
     email: email.toLowerCase().trim(),
-    mobile: mobile ? formatPhoneNumber(mobile) : '',
+    mobile: mobile ? mobile : '',
     pin,
   };
 

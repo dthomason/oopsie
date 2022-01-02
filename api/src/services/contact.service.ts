@@ -1,14 +1,15 @@
 import { Prisma, Contact } from '@prisma/client';
+import PhoneNumber from 'awesome-phonenumber';
 
 import db from '../lib/db';
-import { formatPhoneNumber, log, to } from '../utils';
+import { log, to } from '../utils';
 
 export interface EmailAddress {
   label: string;
   email: string;
 }
 
-export interface PhoneNumber {
+export interface Mobile {
   label: string;
   number: string;
 }
@@ -17,7 +18,7 @@ export type ContactInput = {
   firstName: string;
   lastName: string;
   emailAddresses: EmailAddress[];
-  phoneNumbers: PhoneNumber[];
+  phoneNumbers: Mobile[];
   recordID: string;
 };
 
@@ -30,7 +31,7 @@ export type PreParsed = {
   recordID: string;
 };
 
-export const deserializePhone = (items: string[]): PhoneNumber[] => {
+export const deserializePhone = (items: string[]): Mobile[] => {
   return items.map((item: string) => JSON.parse(item));
 };
 
@@ -155,7 +156,7 @@ export class ContactService {
 
     if (found) {
       const { number } = deserializePhone(found)[0];
-      const parsed = formatPhoneNumber(number, 'mobile');
+      const parsed = PhoneNumber(number.toString(), 'mobile').getNumber('e164');
 
       return parsed;
     }
@@ -191,7 +192,7 @@ export class ContactService {
 
     if (found) {
       const { number } = deserializePhone(found)[0];
-      const parsed = formatPhoneNumber(number, 'mobile');
+      const parsed = PhoneNumber(number, 'mobile').getNumber('e164');
 
       return parsed;
     }

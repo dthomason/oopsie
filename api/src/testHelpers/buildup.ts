@@ -1,4 +1,5 @@
 import { build, fake } from '@jackfranklin/test-data-bot';
+import PhoneNumber from 'awesome-phonenumber';
 import faker from 'faker/locale/en_US';
 import { times } from 'lodash';
 
@@ -11,7 +12,7 @@ interface EmailAddress {
   email: string;
 }
 
-interface PhoneNumber {
+interface Mobile {
   label: string;
   number: string;
 }
@@ -20,26 +21,25 @@ export type BuildContact = {
   firstName: string;
   lastName: string;
   emailAddresses: EmailAddress[];
-  phoneNumbers: PhoneNumber[];
+  phoneNumbers: Mobile[];
   recordID: string;
 };
 
 interface UserBuilder {
   countryCode: CountryCode;
   deviceId: string;
-  firstInstallTime?: number;
   mobile: string;
   verifiedMobile: boolean;
 }
 
+const fakeDigits = faker.phone.phoneNumberFormat(2);
+
 export const userBuilder = build<UserBuilder>({
   fields: {
-    // countryCode: fake(f => String(f.address.countryCode())),
     countryCode: 'US',
     deviceId: fake(f => String(f.datatype.uuid())),
     mobile: fake(f => String(f.phone.phoneNumberFormat(2))),
     verifiedMobile: fake(() => false),
-    firstInstallTime: fake(f => Number(f.datatype.datetime())),
   },
 });
 

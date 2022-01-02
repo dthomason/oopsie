@@ -3,7 +3,8 @@ import 'dotenv-safe/config';
 import jwt from 'jsonwebtoken';
 
 import { PromiseOptions } from '../../@types/types';
-import { formatErrorString } from '../lib';
+
+import { formatErrorString } from '.';
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || '';
 

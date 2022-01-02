@@ -1,3 +1,3 @@
 import bcrypt from 'bcrypt';
 
-export default (string: string) => bcrypt.hash(string, 10);
+export default async (string: string) => await bcrypt.hash(string, 10);

@@ -1,18 +1,15 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
-import * as yup from 'yup';
+import { CountryCode } from 'react-native-country-picker-modal';
 
 import {
   FieldInput,
   GradientButton,
   ModalFormContainer,
 } from '../../../components';
-import { schemaOptions as validate } from '../../../lib';
 import { AuthNavigation, AuthScreenProps } from '../../../navigator';
-import { CountryCode } from 'react-native-country-picker-modal';
 import { SignInRequest } from '../../../sdk/src/user/signIn';
 import { useStore } from '../../../store';
 import { useSignIn } from '../hooks';

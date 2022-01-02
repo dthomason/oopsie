@@ -6,6 +6,7 @@ import {
   VoiceController,
   Healthz,
   UserController,
+  AuthController,
 } from '../controllers';
 import { verifyToken } from '../middleware';
 
@@ -14,23 +15,33 @@ export const router = Router();
 router.get('/healthz', (_, res) => Healthz.show(_, res));
 
 router.post(
-  '/user',
-  asyncHandler(async (req, res) => UserController.create(req, res)),
+  '/refresh',
+  verifyToken,
+  asyncHandler(async (req, res) => AuthController.refresh(req, res)),
 );
 
-router.get(
+// TODO: Combine these next two into one conditional,
+// if user doesn't exist we create them
+// if they do exist we log them in
+router.post(
   '/user',
-  verifyToken,
-  asyncHandler(async (req, res) => UserController.show(req, res)),
+  asyncHandler(async (req, res) => UserController.create(req, res)),
 );
 
 router.post(
   '/user/signin',
   asyncHandler(async (req, res) => UserController.signIn(req, res)),
 );
+
 router.post(
   '/user/verify',
   asyncHandler(async (req, res) => UserController.verify(req, res)),
+);
+
+router.get(
+  '/user',
+  verifyToken,
+  asyncHandler(async (req, res) => UserController.show(req, res)),
 );
 
 router.get(

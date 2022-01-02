@@ -1,6 +1,9 @@
+import PhoneNumber from 'awesome-phonenumber';
 import { Request } from 'express';
 import { Secret, sign } from 'jsonwebtoken';
 
+import { CountryCode } from '../../@types/types';
+import { formatErrorString } from '../lib';
 import { router } from '../routes';
 import { futureDate, log } from '../utils';
 
@@ -20,9 +23,9 @@ class AuthService {
   public router = router;
 
   static async validateThenCreate(req: Request): Promise<ValidationResponse> {
-    const { mobile, countryCode } = req.body;
+    const { mobile, countryCode, deviceId, verifiedMobile } = req.body;
 
-    if (!(mobile && countryCode)) {
+    if (!(mobile && countryCode && deviceId && verifiedMobile)) {
       return {
         conflict: 400,
         message: 'All input is required',
@@ -43,8 +46,8 @@ class AuthService {
     const created = await UserService.create({
       countryCode,
       mobile,
-      verifiedEmail: false,
       verifiedMobile: false,
+      deviceId,
     });
 
     const { status } = await startVerification(created.mobile);
@@ -176,6 +179,19 @@ class AuthService {
 }
 
 export default AuthService;
+
+export const isValidNumber = (
+  mobile: string,
+  countryCode: CountryCode,
+): boolean => {
+  try {
+    const phoneUtil = new PhoneNumber(mobile, countryCode);
+
+    return phoneUtil.isValid();
+  } catch (exception) {
+    throw new Error(formatErrorString('signup.isValidNumber', exception));
+  }
+};
 
 // TODO: use for 2-factor auth
 //       const hash = await UserService.findPinByMobile(mobile);

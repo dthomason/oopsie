@@ -5,7 +5,6 @@ import app from '../../app';
 import { UserService, ContactService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
 import { userBuilder, contactBuilder } from '../../testHelpers/buildup';
-import { formatPhoneNumber } from '../../utils';
 
 beforeEach(async () => {
   const mockedStart = jest.spyOn(service, 'startVerification');
@@ -97,7 +96,7 @@ describe('VoiceController', () => {
       const contacts = await ContactService.getUserContacts(
         caller ? caller.id : '',
       );
-      const number = formatPhoneNumber(contacts[0].phoneNumbers[0].number);
+      const number = contacts[0].phoneNumbers[0].number;
 
       const res = await request(app)
         .post(`/api/voice/lookup/${caller?.id}?type=name`)
@@ -132,7 +131,7 @@ describe('VoiceController', () => {
       expect(res.text).toContain(
         '<Say>We have found your contact, connecting you now',
       );
-      expect(res.text).toContain(`<Number>${formatPhoneNumber(number)}`);
+      expect(res.text).toContain(`<Number>${number}`);
     });
   });
 
@@ -156,7 +155,7 @@ describe('VoiceController', () => {
       expect(res.text).toContain(
         '<Say>We have found your contact, connecting you now',
       );
-      expect(res.text).toContain(formatPhoneNumber(number));
+      expect(res.text).toContain(number);
     });
   });
 

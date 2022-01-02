@@ -2,7 +2,6 @@ import faker from 'faker';
 
 import { UserService } from '../../services/user.service';
 import { userBuilder } from '../../testHelpers';
-import { formatPhoneNumber } from '../../utils';
 
 global.console.log = jest.fn();
 
@@ -16,7 +15,7 @@ describe('#User Service', () => {
 
         expect(created).toBeDefined();
 
-        expect(created.mobile).toBe(formatPhoneNumber(newUser.mobile));
+        expect(created.mobile).toBe(newUser.mobile);
       });
     });
 
@@ -25,14 +24,12 @@ describe('#User Service', () => {
         const user1 = userBuilder();
         const created1 = await UserService.create(user1);
 
-        expect(created1.mobile).toBe(formatPhoneNumber(user1.mobile));
+        expect(created1.mobile).toBe(user1.mobile);
 
         await UserService.create(user1);
 
         expect(global.console.log).toHaveBeenCalledWith(
-          `User.create: Unique Constraint Violation, a user with email: ${formatPhoneNumber(
-            user1.mobile,
-          )} already exists`,
+          `User.create: Unique Constraint Violation, a user with email: ${user1.mobile} already exists`,
         );
       });
     });
@@ -64,7 +61,7 @@ describe('#User Service', () => {
 
         const updatedUser = await UserService.findById(user.id);
 
-        expect(updatedUser?.mobile).toBe(formatPhoneNumber(newMobile));
+        expect(updatedUser?.mobile).toBe(newMobile);
       });
     });
 
@@ -77,7 +74,7 @@ describe('#User Service', () => {
 
         const updatedUser = await UserService.findById(user.id);
 
-        expect(updatedUser?.mobile).toBe(formatPhoneNumber(mobile));
+        expect(updatedUser?.mobile).toBe(mobile);
       });
     });
   });
@@ -87,7 +84,7 @@ describe('#User Service', () => {
       const user = await UserService.create(userBuilder());
       const mobile = faker.phone.phoneNumberFormat(2);
 
-      const formatted = formatPhoneNumber(mobile);
+      const formatted = mobile;
 
       await UserService.update(user.id, { mobile });
 

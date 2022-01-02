@@ -1,7 +1,6 @@
 import twilio from 'twilio';
 
 import { logger } from '../lib';
-import { formatPhoneNumber } from '../utils';
 
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -19,7 +18,7 @@ export const startVerification = async (mobile: string): Promise<Response> => {
     const response = await client.verify.v2
       .services(serviceKey)
       .verifications.create({
-        to: formatPhoneNumber(mobile, 'e164'),
+        to: mobile,
         channel: 'sms',
       });
 
@@ -43,7 +42,7 @@ export const checkVerification = async (
     const response = await client.verify.v2
       .services(serviceKey)
       .verificationChecks.create({
-        to: formatPhoneNumber(mobile, 'e164'),
+        to: mobile,
         code,
       });
 

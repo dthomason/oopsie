@@ -4,6 +4,7 @@ import decode, { JwtPayload } from 'jwt-decode';
 
 import { logger } from '../lib/logger';
 import 'dotenv/config';
+import { CountryCode } from '../../@types/types';
 
 const initialValues = {
   id: '',
@@ -24,6 +25,7 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as Secret;
 interface TokenParams extends JwtPayload {
   id: string;
   mobile: string;
+  countryCode: CountryCode;
   verifiedMobile: boolean;
 }
 

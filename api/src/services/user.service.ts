@@ -1,21 +1,27 @@
 import { Prisma } from '@prisma/client';
+import PhoneNumber from 'awesome-phonenumber';
 
+import { CountryCode } from '../../@types/types';
+import { formatErrorString } from '../lib';
 import db from '../lib/db';
-import { formatPhoneNumber, log, to } from '../utils';
+import { log, to } from '../utils';
+
+import { isValidNumber } from './auth.service';
 
 export interface UserProfile {
   id: string;
   countryCode: string;
+  deviceId?: string;
   email?: string;
   mobile: string;
   verifiedMobile: boolean;
 }
 
 interface CreateInput {
-  countryCode: string;
+  countryCode: CountryCode;
+  deviceId: string;
   mobile: string;
   verifiedMobile: boolean;
-  verifiedEmail: boolean;
 }
 
 const select = Prisma.validator<Prisma.UserSelect>()({
@@ -25,17 +31,24 @@ const select = Prisma.validator<Prisma.UserSelect>()({
   verifiedMobile: true,
 });
 
-const create = async ({
-  countryCode,
-  mobile,
-}: CreateInput): Promise<UserProfile> => {
+const create = async (props: CreateInput): Promise<UserProfile> => {
+  // validateOptions(props);
+
+  const { countryCode, deviceId, verifiedMobile, mobile } = props;
+
+  const formatted = new PhoneNumber(mobile).getNumber('significant');
+
+  console.log({ formatted });
+
   const data = Prisma.validator<CreateInput>()({
-    countryCode: countryCode,
-    verifiedEmail: false,
-    verifiedMobile: false,
-    mobile: formatPhoneNumber(mobile),
+    countryCode,
+    deviceId,
+    mobile: formatted,
+    verifiedMobile,
     // pin: await hash(formatPin(pin), 10),
   });
+
+  console.log({ data });
 
   const [user, err] = await to(
     db.user.create<Prisma.UserCreateArgs>({
@@ -44,12 +57,12 @@ const create = async ({
     }),
   );
 
-  if (err) log(err, 'User.create', mobile);
+  if (err) log(err, 'User.create', props.mobile);
 
   return user;
 };
 
-const findByEmail = async (email: string): Promise<UserProfile> => {
+export const findByEmail = async (email: string): Promise<UserProfile> => {
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
     email: email.toLowerCase().trim(),
   });
@@ -81,8 +94,9 @@ const findById = async (id: string): Promise<UserProfile> => {
 };
 
 const findByMobile = async (mobile: string): Promise<UserProfile> => {
+  const formatted = new PhoneNumber(mobile).getNumber('e164');
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
-    mobile: formatPhoneNumber(mobile),
+    mobile: formatted,
   });
 
   const [user, err] = await to(
@@ -98,8 +112,9 @@ const findByMobile = async (mobile: string): Promise<UserProfile> => {
 };
 
 const findPinByMobile = async (mobile: string): Promise<{ pin: string }> => {
+  const formatted = new PhoneNumber(mobile).getNumber('e164');
   const where = Prisma.validator<Prisma.UserWhereUniqueInput>()({
-    mobile: formatPhoneNumber(mobile),
+    mobile: formatted,
   });
   const selectPassword = Prisma.validator<Prisma.UserSelect>()({
     pin: true,
@@ -141,8 +156,7 @@ const update = async (
 ): Promise<void> => {
   const data = Prisma.validator<Prisma.UserUpdateInput>()({
     ...userData,
-    email: userData.email ? userData.email.toLowerCase().trim() : undefined,
-    mobile: userData.mobile ? formatPhoneNumber(userData.mobile) : undefined,
+    mobile: userData.mobile ? userData.mobile : undefined,
   });
 
   const [, err] = await to(db.user.update({ where: { id }, data }));
@@ -150,9 +164,22 @@ const update = async (
   if (err) log(err, 'User.update', id);
 };
 
+export const validateOptions = (options: CreateInput) => {
+  try {
+    if (!options) throw new Error('options object is required.');
+    if (!options.countryCode)
+      throw new Error('options.countryCode is required');
+    if (!options.mobile) throw new Error('options.mobile is required.');
+    if (!options.deviceId) throw new Error('options.deviceId is required.');
+    if (!isValidNumber(options.mobile, options.countryCode))
+      throw new Error('options.validNumber is required');
+  } catch (exception) {
+    throw new Error(formatErrorString('signup.validateOptions', exception));
+  }
+};
+
 export const UserService = {
   create,
-  findByEmail,
   findById,
   findByMobile: findByMobile,
   findPinByMobile,

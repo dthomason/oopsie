@@ -4,7 +4,7 @@ import VoiceResponse, {
   GatherAttributes,
 } from 'twilio/lib/twiml/VoiceResponse';
 
-import { formatPhoneNumber, formatPin } from '../utils';
+import { formatPin } from '../utils';
 
 import { ContactService } from './contact.service';
 import { UserService } from './user.service';
@@ -91,7 +91,7 @@ const lookup = async (req: Request): Promise<VoiceServiceResponse> => {
       const args = {
         id: found.id,
         found: !!found,
-        number: formatPhoneNumber(Digits),
+        number: Digits,
       };
       const { action, script } = dialog(args).lookupNumber;
 
@@ -133,7 +133,7 @@ const lookup = async (req: Request): Promise<VoiceServiceResponse> => {
       const args = {
         id,
         found: !!match,
-        number: formatPhoneNumber(number),
+        number: number,
       };
 
       const { action, script } = dialog(args).lookupName;

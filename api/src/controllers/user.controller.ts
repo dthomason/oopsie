@@ -87,7 +87,6 @@ export class UserController {
 
       const userProfile = {
         id: user.id,
-        email: user.email,
         mobile: user.mobile,
         verifiedMobile: user.verifiedMobile,
       };

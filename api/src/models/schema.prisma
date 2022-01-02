@@ -11,39 +11,25 @@ generator client {
 }
 
 model User {
-  id               String    @id @unique @default(cuid())
-  // unique identifiers creation entities
-  countryCode      String    @db.VarChar(10)
-  mobile           String    @unique @db.VarChar(15)
-  // by hashing the deviceId and firstInstallTime we get a unique userHash
-  deviceId         String?   @db.VarChar(255)
-  firstInstallTime Int?      @db.Integer
-  // secondary id's that can be retrieved later
-  email            String?   @unique @db.VarChar(255)
-  firstName        String?   @db.VarChar(255)
-  lastName         String?   @db.VarChar(255)
-  pin              String?   @db.VarChar(255)
-  dualAuth         Boolean   @default(false) @db.Boolean
-  verifiedEmail    Boolean   @default(false) @db.Boolean
-  verifiedMobile   Boolean   @default(false) @db.Boolean
-  // relations
-  tokens           Token[]
-  contacts         Contact[]
-}
+  id               String @id @unique @default(cuid())
+  countryCode      String @db.VarChar(10)
+  mobile           String @unique @db.VarChar(20)
+  deviceId        String?  @db.VarChar(255)
 
-model Token {
-  id         String    @id @unique @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  type       TokenType
-  tempToken  String?   @unique // Only used for short lived processes like signup
-  valid      Boolean   @default(true)
-  expiration DateTime
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
+  // Optional
+  email          String?   @unique @db.VarChar(255)
+  firstName      String?   @db.VarChar(255)
+  lastName       String?   @db.VarChar(255)
+  pin            String?   @db.VarChar(255)
+  dualAuth       Boolean   @default(false) @db.Boolean
+  verifiedEmail  Boolean   @default(false) @db.Boolean
+  verifiedMobile Boolean   @default(false) @db.Boolean
+  // relations
+  contacts       Contact[]
 }
 
 model Contact {
+  id             String @id @unique @default(cuid())
   firstName      String @db.VarChar(255)
   lastName       String @db.VarChar(255)
   phoneNumbers   Json[] @db.Json
@@ -52,7 +38,6 @@ model Contact {
   user           User   @relation(fields: [userId], references: [id])
   userId         String
 
-  @@unique([userId, recordID], name: "contactID")
 }
 
 enum Role {
@@ -60,7 +45,3 @@ enum Role {
   ADMIN
 }
 
-enum TokenType {
-  TEMP
-  API
-}

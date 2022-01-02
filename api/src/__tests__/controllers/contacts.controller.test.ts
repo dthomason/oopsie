@@ -35,7 +35,11 @@ describe('POST /api/contacts', () => {
 
     const res = await request(app)
       .post('/api/user/signin')
-      .send({ mobile: newUser.mobile, pin: newUser.pin })
+      .send({
+        mobile: newUser.mobile,
+        countryCode: newUser.countryCode,
+        deviceId: newUser.deviceId,
+      })
       .expect(200);
 
     const { headers } = res;
@@ -89,12 +93,12 @@ describe('GET /api/contacts', () => {
 
     const res1 = await request(app)
       .post('/api/user/signin')
-      .send({ mobile: newUser1.mobile, pin: newUser1.pin })
+      .send({ mobile: newUser1.mobile })
       .expect(200);
 
     const res2 = await request(app)
       .post('/api/user/signin')
-      .send({ mobile: newUser2.mobile, pin: newUser2.pin })
+      .send({ mobile: newUser2.mobile })
       .expect(200);
 
     await request(app)
