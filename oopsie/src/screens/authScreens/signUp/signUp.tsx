@@ -6,6 +6,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import * as yup from 'yup';
 
+import { CountryCode } from '../../../@types/countryCodes';
 import {
   FieldInput,
   GradientButton,
@@ -25,6 +26,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface FormValues {
+  countryCode: CountryCode;
   email: string;
   mobile: string;
   pin: string;
@@ -38,6 +40,7 @@ const defaultValues: FormValues = {
   pin: '',
   newPassword: '',
   secondary: '',
+  countryCode: 'US',
 };
 
 export const SignUp: FC<AuthScreenProps> = () => {

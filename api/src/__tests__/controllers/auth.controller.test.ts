@@ -53,7 +53,6 @@ describe('POST api/auth/signup', () => {
       });
 
       expect(cookie.accessToken.httpOnly).toBe(true);
-      // eslint-disable-next-line jest/valid-expect
       expect(cookie.accessToken.expires).toBeDefined;
 
       const accessToken = cookie.accessToken.value;
@@ -139,7 +138,6 @@ describe('POST NEW /api/auth/signin', () => {
       });
 
       expect(cookie.accessToken.httpOnly).toBe(true);
-      // eslint-disable-next-line jest/valid-expect
       expect(cookie.accessToken.expires).toBeDefined;
 
       const accessToken = cookie.accessToken.value;

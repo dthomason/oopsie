@@ -4,10 +4,10 @@ import { Secret, sign } from 'jsonwebtoken';
 
 import { futureDate } from '../controllers';
 import { router } from '../routes';
-import { checkVerification, startVerification } from './verifyMobile.service';
 import { log, to } from '../utils';
 
 import { UserProfile, UserService } from './user.service';
+import { checkVerification, startVerification } from './verifyMobile.service';
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
