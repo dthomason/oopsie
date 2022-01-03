@@ -2,7 +2,9 @@ import { build, fake } from '@jackfranklin/test-data-bot';
 import faker from 'faker/locale/en_US';
 import { times } from 'lodash';
 
-import { UserService } from '../services/user.service';
+import { UserProfile, UserService } from '../services';
+
+import { phoneGen } from './phoneGen';
 
 interface EmailAddress {
   label: string;
@@ -22,27 +24,45 @@ export type BuildContact = {
   recordID: string;
 };
 
-interface UserCommand {
-  args?: BuildUser;
-  type: 'user';
-}
+type NewUserBuild = {
+  mobile: string;
+  region: string;
+};
 
-interface UserWithContactsCommand {
-  args: BuildUser;
-  type: 'user-with-contacts';
-}
+export const newUserBuilder = (): NewUserBuild => {
+  const np = phoneGen({ manual: true });
+
+  const newUser = () => {
+    return {
+      mobile: np.getNumber('e164'),
+      region: np.getRegionCode(),
+    };
+  };
+
+  const userData = newUser();
+
+  return userData;
+};
+
+type CurrentUserBuild = {
+  mobile: string;
+  region: string;
+  verifiedMobile: boolean;
+};
+
+export const currentUserBuilder = (): CurrentUserBuild => {
+  const np = phoneGen({ manual: true });
+
+  const currentUser = {
+    mobile: np.getNumber('e164'),
+    region: np.getRegionCode(),
+    verifiedMobile: true,
+  };
+
+  return currentUser;
+};
 
 faker.setLocale('en_US');
-
-type Command = UserCommand | UserWithContactsCommand;
-
-export async function buildup(commands: Command[]): Promise<void> {
-  commands.forEach(command => {
-    if (command.type === 'user') {
-      buildUser(command.args);
-    }
-  });
-}
 
 interface UserBuilder {
   email: string;
@@ -64,25 +84,10 @@ export const userBuilder = build<UserBuilder>({
   },
 });
 
-// mobile: fake(() => faker.phone.phoneNumberFormat()),
-// verifiedEmail: fake(() => Boolean(false)),
-// verifiedMobile: fake(() => Boolean(false)),
-
 export type BuildUser = {
   user?: UserBuilder;
   contacts?: BuildContact[];
 };
-
-async function buildUser({ user }: BuildUser = {}): Promise<void> {
-  const builtUser = user
-    ? user
-    : {
-        ...userBuilder(),
-        verifiedMobile: true,
-      };
-
-  await UserService.create(builtUser);
-}
 
 const labels = ['home', 'mobile'];
 
@@ -109,3 +114,21 @@ export const contactBuilder = build<BuildContact>({
     recordID: fake(f => String(f.random.number())),
   },
 });
+
+export const buildNewUser = async (): Promise<UserProfile | undefined> => {
+  try {
+    const newUser = newUserBuilder();
+
+    await UserService.create(newUser);
+    const user = UserService.findByPhone(newUser.mobile);
+
+    if (!user) {
+      console.error('DID NOT CREATED');
+      throw new Error('DID NOT CREATE');
+    }
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+};

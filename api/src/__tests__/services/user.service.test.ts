@@ -1,8 +1,5 @@
-import faker from 'faker';
-
 import { UserService } from '../../services/user.service';
-import { userBuilder } from '../../testHelpers';
-import { formatPhoneNumber } from '../../utils';
+import { fakerPhoneGen } from '../../testHelpers';
 
 global.console.log = jest.fn();
 
@@ -10,29 +7,34 @@ describe('#User Service', () => {
   describe('#create', () => {
     describe('when provided with correct params', () => {
       it('creates a new User', async () => {
-        const newUser = userBuilder();
-
-        const { email } = newUser;
+        const newUser = {
+          mobile: fakerPhoneGen(),
+          region: 'US',
+        };
 
         const created = await UserService.create(newUser);
 
         expect(created).toBeDefined();
 
-        expect(created.email).toBe(email.toLowerCase());
+        expect(created.mobile).toBe(newUser.mobile);
       });
     });
 
     describe('when that user has already been created', () => {
       it('returns an error', async () => {
-        const user1 = userBuilder();
+        const user1 = {
+          mobile: fakerPhoneGen(),
+          region: 'US',
+        };
+        const user2 = user1;
         const created1 = await UserService.create(user1);
 
-        expect(created1.email).toBe(user1.email.toLowerCase());
+        expect(created1.mobile).toBe(user1.mobile);
 
-        await UserService.create(user1);
+        await UserService.create(user2);
 
         expect(global.console.log).toHaveBeenCalledWith(
-          `User.create: Unique Constraint Violation, a user with email: ${user1.email.toLowerCase()} already exists`,
+          `User.create: Unique Constraint Violation, the account with: ${user2.mobile} already exists`,
         );
       });
     });
@@ -40,73 +42,55 @@ describe('#User Service', () => {
 
   describe('#findById', () => {
     it('finds User by id', async () => {
-      const user = await UserService.create(userBuilder());
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+      const user = await UserService.create(build);
 
       const found = await UserService.findById(user.id);
 
       expect(user.id).not.toBe('');
 
       expect(found?.id).toBe(user.id);
-    });
-  });
-
-  describe('#findByEmail', () => {
-    it('finds User by email', async () => {
-      const user = await UserService.create(userBuilder());
-      const userEmail = user?.email || '';
-
-      const found = await UserService.findByEmail(userEmail);
-
-      expect(userEmail).not.toBe('');
-
-      expect(found?.email).toBe(userEmail);
-    });
-  });
-
-  describe('#update', () => {
-    describe('when updating an email', () => {
-      it('updates with the correct format', async () => {
-        const user = await UserService.create(userBuilder());
-        const email = user.email;
-        const newEmail = faker.internet.email();
-
-        expect(email).not.toBe('');
-        expect(email).not.toBe(newEmail);
-
-        await UserService.update(user.id, { email: newEmail });
-
-        const updatedUser = await UserService.findById(user.id);
-
-        expect(updatedUser?.email).toBe(newEmail.toLowerCase());
-      });
-    });
-
-    describe('when updating a mobile number', () => {
-      it('updates with the correct format', async () => {
-        const user = await UserService.create(userBuilder());
-        const mobile = faker.phone.phoneNumberFormat();
-
-        await UserService.update(user.id, { mobile });
-
-        const updatedUser = await UserService.findById(user.id);
-
-        expect(updatedUser?.mobile).toBe(formatPhoneNumber(mobile));
-      });
+      expect(found.mobile).toBe(user.mobile);
     });
   });
 
   describe('#findByPhone', () => {
-    it('finds User by mobile', async () => {
-      const user = await UserService.create(userBuilder());
-      const mobile = faker.phone.phoneNumberFormat();
+    it('finds User by phone', async () => {
+      const newUser = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+      const user = await UserService.create(newUser);
 
-      const formatted = formatPhoneNumber(mobile);
+      const found = await UserService.findByPhone(user.mobile);
 
-      await UserService.update(user.id, { mobile });
+      expect(found.mobile).not.toBe('');
+      expect(found.mobile).toBe(newUser.mobile);
+    });
+  });
 
-      const userWithPhone = await UserService.findByPhone(formatted);
+  describe('#update', () => {
+    describe('when updating a mobile number', () => {
+      it('updates with the correct format', async () => {
+        const build = {
+          mobile: fakerPhoneGen(),
+          region: 'US',
+        };
+        const user = await UserService.create(build);
+        const newMobile = fakerPhoneGen();
 
-      expect(userWithPhone?.mobile).toBe(formatted);
+        expect(user.mobile).not.toBe('');
+        expect(user.mobile).not.toBe(newMobile);
+
+        const updatedUser = await UserService.update(user.id, {
+          mobile: newMobile,
+        });
+
+        expect(updatedUser.mobile).toBe(newMobile);
+      });
     });
   });
 });

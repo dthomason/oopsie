@@ -44,7 +44,7 @@ interface Args {
 }
 
 export const dialog = (args: Args = {}) => {
-  const { id, number, pin, found } = args;
+  const { id, number, found } = args;
 
   return {
     default: {
@@ -53,7 +53,6 @@ export const dialog = (args: Args = {}) => {
     },
     gatherNumber: {
       action: '/api/voice/lookup?type=number',
-      numDigits: 10,
       script:
         'Hi, please enter your mobile number including area code finished by the pound key',
     },
@@ -88,7 +87,8 @@ export const dialog = (args: Args = {}) => {
     },
     errorPin: {
       action: `/api/voice/lookup/${id}?type=pin`,
-      script: `Sorry, the number ${pin} was not found.  Please enter it again`,
+      numDigits: 4,
+      script: `Sorry, that pin was not found.  Please enter it again`,
     },
     errorName: {
       action: `/api/voice/lookup/${id}?type=name`,

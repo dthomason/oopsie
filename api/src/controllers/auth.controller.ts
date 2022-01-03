@@ -47,7 +47,6 @@ export class AuthController {
 
       const userProfile = {
         id: user.id,
-        email: user.email,
         mobile: user.mobile,
         verifiedMobile: user.verifiedMobile,
       };
@@ -70,7 +69,6 @@ export class AuthController {
 
       const createdUser = {
         id: user.id,
-        email: user.email,
         mobile: user.mobile,
         verifiedMobile: user.verifiedMobile,
       };
@@ -92,7 +90,6 @@ export class AuthController {
 
       const userProfile = {
         id: user.id,
-        email: user.email,
         mobile: user.mobile,
         verifiedMobile: user.verifiedMobile,
       };

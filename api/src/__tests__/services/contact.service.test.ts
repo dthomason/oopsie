@@ -2,16 +2,26 @@ import { times } from 'lodash';
 
 import { sortArray } from '../../lib';
 import { UserService, ContactService } from '../../services';
-import { contactBuilder, userBuilder } from '../../testHelpers';
+import { contactBuilder, fakerPhoneGen } from '../../testHelpers';
 
 global.console.log = jest.fn();
+
+beforeEach(() => {
+  jest.resetModules();
+});
 
 describe('#Contact Service', () => {
   describe('#addContacts', () => {
     it('that the data added is valid', async () => {
-      const user = await UserService.create(userBuilder());
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+
+      await UserService.create(build);
       const newContact = [contactBuilder()];
 
+      const user = await UserService.findByPhone(build.mobile);
       const response = await ContactService.addContacts(user.id, newContact);
 
       const expected = newContact[0];
@@ -31,10 +41,17 @@ describe('#Contact Service', () => {
 
   describe('#addContacts', () => {
     it('adds the proper data', async () => {
-      const user = await UserService.create(userBuilder());
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+
+      await UserService.create(build);
       const newContacts = times(3)
         .map(() => contactBuilder())
         .sort(sortArray);
+
+      const user = await UserService.findByPhone(build.mobile);
 
       await ContactService.addContacts(user.id, newContacts);
 
@@ -51,10 +68,17 @@ describe('#Contact Service', () => {
 
   describe('#getUserContacts', () => {
     it('receives the User Contact list', async () => {
-      const user = await UserService.create(userBuilder());
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+
+      await UserService.create(build);
       const newContacts = times(2)
         .map(() => contactBuilder())
         .sort(sortArray);
+
+      const user = await UserService.findByPhone(build.mobile);
 
       await ContactService.addContacts(user.id, newContacts);
 
