@@ -3,12 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSContactsUsageDescription</key>
-	<string>Toll-Free Dial-by-Name Directory Service
-  ...
-  pod &apos;react-native-contacts&apos;, :path =&gt; &apos;../node_modules/react-native-contacts&apos; &lt;-- add me
-  ...
-end
-</string>
+	<string>Toll-Free Dial-by-Name Directory Service</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

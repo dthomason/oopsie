@@ -26,17 +26,15 @@ export const useSignUp = (
 
       updateUserValues(data);
       setTypedValues({
-        email: '',
         mobile: '',
       });
 
       navigation.replace('Verify', {
-        email: data.email,
         mobile: data.mobile,
       });
     } catch (err) {
       if (isAxiosError(err)) {
-        setError('password', { message: parsedAxiosError(err).error });
+        setError('mobile', { message: parsedAxiosError(err).error });
       }
     }
   };
