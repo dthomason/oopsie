@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import { View } from 'react-native';
+import { CheckBox, Text } from 'react-native-elements';
 
 import { useContacts } from '../../../hooks';
 
@@ -53,6 +53,7 @@ export const Activity: FC = () => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
+            backgroundColor: 'white',
             paddingTop: 16,
           }}
         >

@@ -24,7 +24,7 @@ export type SignUpResponse = ResponsePayload;
 /**
  * POST `/api/auth/signup
  *
- * { mobile: string, pin: string, password: string }
+ * { deviceId: string, mobile: string, region: string }
  */
 export const create = (data: CreateRequest): CreateConfig => {
   return {

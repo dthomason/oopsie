@@ -4,7 +4,7 @@ import PhoneNumber from 'awesome-phonenumber';
 import React, { FC, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { View, StyleSheet, InputAccessoryView, Button } from 'react-native';
-import { getDeviceId } from 'react-native-device-info';
+import { getFirstInstallTime } from 'react-native-device-info';
 import { Text } from 'react-native-elements';
 import * as yup from 'yup';
 
@@ -51,7 +51,6 @@ export const SignUp: FC<AuthScreenProps> = () => {
 
   const onSubmit = (args: FormValues) => {
     const phoneUtil = new PhoneNumber(args.mobile, countryCode);
-    const deviceId = getDeviceId();
 
     if (!phoneUtil.isValid()) {
       setError('mobile', { message: 'Invalid Phone Number' });
@@ -60,11 +59,12 @@ export const SignUp: FC<AuthScreenProps> = () => {
     }
 
     const data = {
-      deviceId,
       mobile: phoneUtil.getNumber('e164'),
       region: countryCode,
+      installTime: getFirstInstallTime(),
     };
 
+    console.log({ data });
     signUp(data);
   };
 
