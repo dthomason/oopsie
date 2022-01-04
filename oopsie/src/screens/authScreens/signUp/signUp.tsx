@@ -79,7 +79,7 @@ export const SignUp: FC<AuthScreenProps> = () => {
   }, []);
 
   return (
-    <ModalFormContainer givenTitle="Sign Up" onClose={handleClose}>
+    <ModalFormContainer givenTitle="Get Started" onClose={handleClose}>
       <Text style={styleText}>
         Oopsie will send an SMS message to verify your phone number. Select your
         country and enter your phone number

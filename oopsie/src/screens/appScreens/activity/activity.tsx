@@ -58,13 +58,10 @@ export const Activity: FC = () => {
           }}
         >
           <CheckBox
-            key={step.label}
-            style={{
-              borderWidth: 1,
-              borderColor: '#BBBBBB',
-              backgroundColor: '#EEEEEE',
-              width: '95%',
-            }}
+            center
+            title="Click Here"
+            checked={true}
+            onPress={() => console.log('yes')}
           />
         </View>
       ))}

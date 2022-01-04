@@ -34,24 +34,19 @@ class AuthService {
     const foundUser = await UserService.findByPhone(mobile);
 
     if (foundUser) {
-      return {
-        conflict: 409,
-        message: 'User Already Exists. Please Sign In',
-        user: req.body,
-      };
+      await startVerification(foundUser.mobile);
+
+      return { user: foundUser };
+    } else {
+      const created = await UserService.create({
+        mobile,
+        region,
+      });
+
+      await startVerification(created.mobile);
+
+      return { user: created };
     }
-
-    const created = await UserService.create({
-      mobile,
-      region,
-    });
-
-    const { status } = await startVerification(created.mobile);
-
-    if (status !== 'success')
-      log(status, 'Signup Verification process', mobile);
-
-    return { user: created };
   }
 
   static async configureTokens({

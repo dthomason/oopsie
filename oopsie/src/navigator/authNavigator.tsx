@@ -4,19 +4,11 @@ import {
 } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 
-import {
-  SplashScreen,
-  SignIn,
-  ForgotPassword,
-  SignUp,
-  Verify,
-} from '../screens';
+import { SplashScreen, SignUp, Verify } from '../screens';
 
 export type AuthParamList = {
   SplashScreen: undefined;
-  SignIn: undefined;
   SignUp: undefined;
-  ForgotPassword: undefined;
   Verify: {
     mobile: string;
   };
@@ -53,11 +45,9 @@ export const AuthNavigator: FC = () => {
         }}
       >
         <AuthStack.Screen component={SignUp} name="SignUp" />
-        <AuthStack.Screen component={SignIn} name="SignIn" />
         <AuthStack.Screen component={Verify} name="Verify" />
       </AuthStack.Group>
       <AuthStack.Screen component={SplashScreen} name="SplashScreen" />
-      <AuthStack.Screen component={ForgotPassword} name="ForgotPassword" />
     </AuthStack.Navigator>
   );
 };

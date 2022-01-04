@@ -6,7 +6,6 @@ import AppNameIcon from '../../assets/brand/name_icon.svg';
 import { BrandIcon, Pressable } from '../components';
 import { useCustomTheme } from '../hooks';
 import { AuthNavigation, AuthScreenProps } from '../navigator';
-import { useStore } from '../store';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -16,20 +15,8 @@ const buttonColors = {
   pressed: '#316FB6',
 };
 
-const darkButton = {
-  text: '#000000',
-  unPressed: '#FFFFFF',
-  pressed: '#EEEEEE',
-};
-const lightButton = {
-  text: '#FFFFFF',
-  unPressed: '#000000',
-  pressed: '#111111',
-};
-
 export const SplashScreen: FC<AuthScreenProps> = () => {
   const navigation = useNavigation<AuthNavigation>();
-  const isDark = useStore(state => state.isDark);
   const {
     theme: { colors },
   } = useCustomTheme();
@@ -43,9 +30,6 @@ export const SplashScreen: FC<AuthScreenProps> = () => {
     color: colors.text,
   };
 
-  const handleSignInPress = () => {
-    navigation.navigate('SignIn');
-  };
   const handleSignUpPress = () => {
     navigation.navigate('SignUp');
   };
@@ -77,14 +61,9 @@ export const SplashScreen: FC<AuthScreenProps> = () => {
         </AnimatedView>
         <AnimatedView style={animatedWrapper}>
           <Pressable
-            buttonText={'Create your free account'}
+            buttonText={'Get Started'}
             onChange={handleSignUpPress}
             buttonColors={buttonColors}
-          />
-          <Pressable
-            buttonText={'Sign In'}
-            onChange={handleSignInPress}
-            buttonColors={isDark ? darkButton : lightButton}
           />
         </AnimatedView>
         <AnimatedView style={animatedWrapper}>
