@@ -36,6 +36,11 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = oopsie/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = oopsie/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = oopsie/main.m; sourceTree = "<group>"; };
+		43CF057F2785883B00725156 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		43CF05802785883B00725156 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		43CF05812785883B00725156 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		43CF05822785883B00725156 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		43CF05832785883B00725156 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		6380DA9E108DD561F30AD3C1 /* Pods-oopsie-oopsieTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oopsie-oopsieTests.release.xcconfig"; path = "Target Support Files/Pods-oopsie-oopsieTests/Pods-oopsie-oopsieTests.release.xcconfig"; sourceTree = "<group>"; };
 		6714FE58BD3310A8ED341F09 /* Pods-oopsie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oopsie.debug.xcconfig"; path = "Target Support Files/Pods-oopsie/Pods-oopsie.debug.xcconfig"; sourceTree = "<group>"; };
 		6EEDA297F9E38174EFABD9F4 /* libPods-oopsie-oopsieTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-oopsie-oopsieTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +122,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		43CF057E2785883B00725156 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				43CF057F2785883B00725156 /* Feather.ttf */,
+				43CF05802785883B00725156 /* MaterialCommunityIcons.ttf */,
+				43CF05812785883B00725156 /* AntDesign.ttf */,
+				43CF05822785883B00725156 /* FontAwesome.ttf */,
+				43CF05832785883B00725156 /* MaterialIcons.ttf */,
+			);
+			name = Fonts;
+			path = "../../../../Shared Assets/Icons/Fonts";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +145,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				43CF057E2785883B00725156 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* oopsie */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* oopsieTests */,
@@ -428,7 +447,6 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D43AD0A9557CD35E97F2C388 /* Pods-oopsie-oopsieTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -459,7 +477,6 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6380DA9E108DD561F30AD3C1 /* Pods-oopsie-oopsieTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
