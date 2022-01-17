@@ -11,8 +11,6 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import { HeaderAppBar } from '../components';
 import { Home, Activity, UserSettings } from '../screens';
-import { OnboardScreen } from '../screens/appScreens/onboard/onboardScreen';
-import { useStore } from '../store';
 
 export type AppParamList = {
   Home: undefined;
@@ -31,12 +29,6 @@ export type AppNavigation = AppScreenProps['navigation'];
 
 export type AppRoute = AppScreenProps['route'];
 
-type OnboardingParamList = {
-  OnboardScreen: undefined;
-};
-
-const OnboardStack = createNativeStackNavigator<OnboardingParamList>();
-
 const AppStack = createNativeStackNavigator<AppParamList>();
 
 const Tab = createBottomTabNavigator<AppParamList>();
@@ -47,19 +39,6 @@ export type AppNavProps = {
 };
 
 export const AppNavigator: FC = () => {
-  const userValues = useStore(state => state.userValues);
-
-  if (userValues.newUser)
-    return (
-      <OnboardStack.Navigator>
-        <OnboardStack.Screen
-          options={{ headerShown: false }}
-          name="OnboardScreen"
-          component={OnboardScreen}
-        />
-      </OnboardStack.Navigator>
-    );
-
   return (
     <AppStack.Navigator initialRouteName="Main">
       <AppStack.Screen

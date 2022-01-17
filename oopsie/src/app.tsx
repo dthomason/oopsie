@@ -4,11 +4,13 @@ import { View, LogBox, StyleSheet } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import shallow from 'zustand/shallow';
 
 import { BrandIcon } from './components';
 import { useRefresh, useCustomTheme } from './hooks';
 import { validateToken } from './lib/validateToken';
 import { AuthNavigator, AppNavigator } from './navigator';
+import { OnboardNavigator } from './navigator/onboardNavigator';
 import { useStore } from './store';
 
 LogBox.ignoreLogs(['Redux']);
@@ -18,8 +20,14 @@ const App: FC = () => {
   const { refreshToken } = useRefresh();
   const { iconColor, theme } = useCustomTheme();
   const [isLoading, setIsLoading] = useState(true);
-  const signedIn = useStore(state => state.signedIn);
-  const hasHydrated = useStore(state => state.hasHydrated);
+  const { signedIn, hasHydrated, isOnboarding } = useStore(
+    ({ signedIn, isOnboarding, hasHydrated }) => ({
+      signedIn,
+      isOnboarding,
+      hasHydrated,
+    }),
+    shallow,
+  );
 
   useEffect(() => {
     if (hasHydrated && signedIn) {
@@ -31,14 +39,16 @@ const App: FC = () => {
         if (stillValid) {
           console.log('Fetching User settings and logging in...');
 
-          refreshToken(foundToken);
+          (async () => {
+            await refreshToken(foundToken);
+          })();
 
           console.log('Success!');
         }
       }
     }
 
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 1000);
 
     return;
   }, [hasHydrated, refreshToken, signedIn]);
@@ -53,7 +63,13 @@ const App: FC = () => {
         ) : (
           <ThemeProvider theme={theme}>
             <NavigationContainer theme={theme}>
-              {signedIn ? <AppNavigator /> : <AuthNavigator />}
+              {!signedIn ? (
+                <AuthNavigator />
+              ) : isOnboarding ? (
+                <OnboardNavigator />
+              ) : (
+                <AppNavigator />
+              )}
             </NavigationContainer>
           </ThemeProvider>
         )}

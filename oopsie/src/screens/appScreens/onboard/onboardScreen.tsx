@@ -18,6 +18,7 @@ export const OnboardScreen: FC = () => {
 
   useContacts();
   const updateUserValues = useStore(state => state.updateUserValues);
+  const setIsOnboarding = useStore(state => state.setIsOnboarding);
 
   const handleDone = async () => {
     try {
@@ -27,6 +28,7 @@ export const OnboardScreen: FC = () => {
       const { data } = await axios.request(config);
 
       console.log({ data });
+      setIsOnboarding(data.newUser);
 
       updateUserValues(data);
     } catch (err) {

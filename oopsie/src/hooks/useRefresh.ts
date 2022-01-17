@@ -14,6 +14,7 @@ export const useRefresh = (): UseUser => {
   const setToken = useStore(state => state.setToken);
   const setSignedIn = useStore(state => state.setSignedIn);
   const updateUserValues = useStore(state => state.updateUserValues);
+  const setIsOnboarding = useStore(state => state.setIsOnboarding);
   const [error, setError] = useState<AxiosError>();
 
   const refreshToken = async (token: string): Promise<void> => {
@@ -32,6 +33,8 @@ export const useRefresh = (): UseUser => {
         console.log('Not a Valid Token, Please Sign In Again');
       } else {
         const data = decodeToken(validToken);
+
+        setIsOnboarding(data.newUser);
 
         console.log({ data });
 

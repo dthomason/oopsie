@@ -5,8 +5,9 @@ module.exports = {
     'module:metro-react-native-babel-preset',
   ],
   plugins: [
-    // '@babel/plugin-proposal-class-properties',
-    // '@babel/plugin-proposal-private-methods',
+    // ['@babel/plugin-proposal-class-properties', { loose: true }],
+    // ['@babel/plugin-proposal-private-methods', { loose: true }],
+    // ['@babel/plugin-proposal-class-property-in-object', { loose: true }],
     [
       require.resolve('babel-plugin-module-resolver'),
       {

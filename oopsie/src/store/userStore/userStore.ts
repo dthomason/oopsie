@@ -59,10 +59,12 @@ export interface UserStore {
   token: string;
   successfulSync: boolean;
   currentStamp: string;
+  isOnboarding: boolean;
   typedValues: TypedValues;
   userValues: InputUserValues;
   permissions: Permissions;
   recordIDs: string[];
+  setIsOnboarding: (isOnboarding: boolean) => void;
   setCountryCode: (countryCode: CountryCode) => void;
   setCurrentStamp: (stamp: string) => void;
   setSuccessfulSync: (result: boolean) => void;
@@ -84,6 +86,7 @@ export const useStore = create<UserStore>(
         error: '',
         hasHydrated: false,
         isDark: false,
+        isOnboarding: true,
         loading: true,
         permissions: 'undefined',
         recordIDs: [''],
@@ -92,6 +95,7 @@ export const useStore = create<UserStore>(
         token: '',
         typedValues: {},
         userValues: {},
+        setIsOnboarding: (isOnboarding: boolean) => set({ isOnboarding }),
         setCountryCode: (countryCode: CountryCode) => set({ countryCode }),
         setCurrentStamp: (stamp: string) => set({ currentStamp: stamp }),
         setSuccessfulSync: (result: boolean) => set({ successfulSync: result }),

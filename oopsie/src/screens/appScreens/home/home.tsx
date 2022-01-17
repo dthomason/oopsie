@@ -1,5 +1,5 @@
 import CookieManager from '@react-native-cookies/cookies';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Switch, Text } from 'react-native-elements';
 
@@ -23,16 +23,14 @@ export const Home: FC = () => {
     exp: userValues?.exp ? new Date(userValues.exp) : 0,
   };
 
-  useEffect(() => {
-    const handleEnabled = async () => {
-      await CookieManager.clearAll();
-      setSignedIn(false);
-    };
+  const handleChange = async () => {
+    setEnabled(!enabled);
 
     if (enabled) {
-      handleEnabled();
+      await CookieManager.clearAll();
+      setSignedIn(false);
     }
-  }, [enabled, setSignedIn]);
+  };
 
   return (
     <View style={styles.container}>
@@ -47,7 +45,7 @@ export const Home: FC = () => {
       <Text h1></Text>
       <Switch
         value={enabled}
-        onChange={() => setEnabled(!enabled)}
+        onValueChange={handleChange}
         color={enabled ? colors.secondary : colors.grey0}
       />
       <View style={{ paddingTop: 12 }}>

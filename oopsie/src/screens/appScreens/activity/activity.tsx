@@ -1,8 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 import { CheckBox, Text } from 'react-native-elements';
-
-import { useContacts } from '../../../hooks';
 
 interface Steps {
   label: string;
@@ -29,12 +27,6 @@ const stepsRemaining: Steps[] = [
 ];
 
 export const Activity: FC = () => {
-  const { handlePermissions, permissions } = useContacts();
-
-  useEffect(() => {
-    handlePermissions();
-  }, [permissions]);
-
   return (
     <View
       style={{
