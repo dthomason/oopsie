@@ -10,14 +10,15 @@ import React, { FC } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 
 import { HeaderAppBar } from '../components';
-import { Home, Activity, UserSettings, Sample } from '../screens';
+import { Home, Activity, UserSettings } from '../screens';
+import { OnboardScreen } from '../screens/appScreens/onboard/onboardScreen';
 
 export type AppParamList = {
   Home: undefined;
   Settings: undefined;
   Activity: undefined;
   Main: undefined;
-  Sample: undefined;
+  OnboardScreen: undefined;
 };
 
 export type AppScreenProps = BottomTabNavigationProp<
@@ -41,13 +42,14 @@ export type AppNavProps = {
 
 export const AppNavigator: FC = () => {
   return (
-    <AppStack.Navigator initialRouteName="Main">
+    <AppStack.Navigator initialRouteName="OnboardScreen">
       <AppStack.Screen
         options={{ headerShown: false }}
         name="Main"
         component={Main}
       />
       <AppStack.Screen name="Settings" component={UserSettings} />
+      <AppStack.Screen name="OnboardScreen" component={OnboardScreen} />
     </AppStack.Navigator>
   );
 };
@@ -77,10 +79,10 @@ const Main: FC = ({ children }) => {
       />
 
       <Tab.Screen
-        name="Sample"
-        component={Sample}
+        name="OnboardScreen"
+        component={OnboardScreen}
         options={{
-          tabBarLabel: 'Sample',
+          tabBarLabel: 'OnboardScreen',
           tabBarIcon: ({ color, size }) => (
             <Feather name="menu" color={color} size={size} />
           ),

@@ -19,9 +19,10 @@ const App: FC = () => {
   const { iconColor, theme } = useCustomTheme();
   const [isLoading, setIsLoading] = useState(true);
   const signedIn = useStore(state => state.signedIn);
+  const hasHydrated = useStore(state => state.hasHydrated);
 
   useEffect(() => {
-    if (!isLoading && signedIn) {
+    if (hasHydrated && signedIn) {
       const foundToken = useStore.getState().token;
 
       if (foundToken) {
@@ -29,7 +30,12 @@ const App: FC = () => {
 
         if (stillValid) {
           console.log('Fetching User settings and logging in...');
-          refreshToken(foundToken);
+
+          async () => {
+            await refreshToken(foundToken);
+          };
+
+          console.log('Success!');
         }
       }
     }
@@ -37,7 +43,7 @@ const App: FC = () => {
     setTimeout(() => setIsLoading(false), 2000);
 
     return;
-  }, [isLoading, refreshToken, signedIn]);
+  }, [hasHydrated, refreshToken, signedIn]);
 
   return (
     <SafeAreaProvider>

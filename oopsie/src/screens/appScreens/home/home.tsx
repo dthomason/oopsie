@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Contacts from 'react-native-contacts';
 import { Switch, Text } from 'react-native-elements';
+import shallow from 'zustand/shallow';
 
 import { useCustomTheme } from '../../../hooks';
 import { parseContacts } from '../../../lib';
@@ -11,13 +12,34 @@ import * as api from '../../../sdk';
 import { useStore } from '../../../store';
 
 export const Home: FC = () => {
-  const setSignedIn = useStore(state => state.setSignedIn);
-  const permissions = useStore(state => state.permissions);
-  const setPermissions = useStore(state => state.setPermissions);
-  const successfulSync = useStore(state => state.successfulSync);
-  const setSuccessfulSync = useStore(state => state.setSuccessfulSync);
-  const currentStamp = useStore(state => state.currentStamp);
-  const setCurrentStamp = useStore(state => state.setCurrentStamp);
+  const {
+    setSignedIn,
+    permissions,
+    setPermissions,
+    successfulSync,
+    setSuccessfulSync,
+    currentStamp,
+    setCurrentStamp,
+  } = useStore(
+    ({
+      setSignedIn,
+      permissions,
+      setPermissions,
+      successfulSync,
+      setSuccessfulSync,
+      currentStamp,
+      setCurrentStamp,
+    }) => ({
+      setSignedIn,
+      permissions,
+      setPermissions,
+      successfulSync,
+      setSuccessfulSync,
+      currentStamp,
+      setCurrentStamp,
+    }),
+    shallow,
+  );
   const userValues = useStore(state => state.userValues);
   const [enabled, setEnabled] = useState(false);
   const {
@@ -81,7 +103,6 @@ export const Home: FC = () => {
   useEffect(() => {
     const handleEnabled = async () => {
       await CookieManager.clearAll();
-      useStore.persist.clearStorage();
       setSignedIn(false);
     };
 

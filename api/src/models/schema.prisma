@@ -17,6 +17,7 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   verifiedMobile Boolean? @default(false) @db.Boolean
+  newUser        Boolean? @default(true) @db.Boolean
 
   //optional
   email         String?   @db.VarChar(255)

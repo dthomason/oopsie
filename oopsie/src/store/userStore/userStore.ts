@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import decode, { JwtPayload } from 'jwt-decode';
 import { CountryCode } from 'react-native-country-picker-modal';
-import create, { GetState, SetState } from 'zustand';
+import create, { GetState, SetState, StateSelector } from 'zustand';
 import {
   devtools,
   persist,
   StoreApiWithDevtools,
   StoreApiWithPersist,
 } from 'zustand/middleware';
+import shallow from 'zustand/shallow';
 
 import { im } from '../middleware/immerMiddleware';
 
@@ -76,12 +77,7 @@ export interface UserStore {
   updateUserValues: (user: InputUserValues) => void;
 }
 
-export const useStore = create<
-  UserStore,
-  SetState<UserStore>,
-  GetState<UserStore>,
-  StoreApiWithDevtools<UserStore> & StoreApiWithPersist<UserStore>
->(
+export const useStore = create<UserStore>(
   devtools(
     persist(
       im(set => ({
@@ -135,3 +131,6 @@ export const useStore = create<
     { name: 'UserStore' },
   ),
 );
+
+// export const useStore = <K>(selector: StateSelector<UserStore, K>): K =>
+//   userStore(selector, shallow);

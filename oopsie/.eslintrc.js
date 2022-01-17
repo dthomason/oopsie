@@ -4,10 +4,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:import/react',
     'plugin:import/warnings',
   ],
   env: {
@@ -91,4 +91,26 @@ module.exports = {
     'no-prototype-builtins': 'warn',
     'no-redeclare': 'warn',
   },
+  overrides: [
+    {
+      files: ['*.jsx', '*.tsx'],
+      extends: ['plugin:react/recommended', 'plugin:import/react'],
+      env: {
+        browser: true,
+      },
+      plugins: ['react-hooks'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
+        'react/jsx-uses-react': 'off',
+        'react/prop-types': 'off',
+        'react/react-in-jsx-scope': 'off',
+      },
+      settings: {
+        react: {
+          version: 'detect',
+        },
+      },
+    },
+  ],
 };

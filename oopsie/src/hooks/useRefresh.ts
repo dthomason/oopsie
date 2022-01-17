@@ -16,9 +16,11 @@ export const useRefresh = (): UseUser => {
   const updateUserValues = useStore(state => state.updateUserValues);
   const [error, setError] = useState<AxiosError>();
 
-  const refreshToken = async (token: string) => {
+  const refreshToken = async (token: string): Promise<void> => {
     try {
       configureAxios({ accessToken: token });
+
+      console.log('Refreshing Token...');
 
       const config = api.signIn.show();
       const { headers } = await axios.request(config);
@@ -27,15 +29,19 @@ export const useRefresh = (): UseUser => {
       if (!validToken) {
         setSignedIn(false);
         setToken('');
+        console.log('Not a Valid Token, Please Sign In Again');
       } else {
         const data = decodeToken(validToken);
 
         updateUserValues(data);
         setToken(validToken);
         setSignedIn(true);
+        console.log('Success!!');
       }
     } catch (err) {
       setSignedIn(false);
+
+      console.error(err);
 
       if (isAxiosError(err)) {
         setError(err);

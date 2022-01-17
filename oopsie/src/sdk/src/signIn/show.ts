@@ -7,7 +7,6 @@ interface RequestConfig extends AxiosRequestConfig {
 
 interface ResponsePayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
 }
