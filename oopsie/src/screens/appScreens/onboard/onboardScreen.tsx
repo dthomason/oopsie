@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { FC } from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 
@@ -6,18 +7,37 @@ import OopsieWord from '../../../../assets/images/oopsie_word.svg';
 import Phone from '../../../../assets/images/phone.svg';
 import Question from '../../../../assets/images/what.svg';
 import { useCustomTheme } from '../../../hooks';
+import { isAxiosError, parsedAxiosError } from '../../../lib';
+import * as api from '../../../sdk';
+import { useStore } from '../../../store';
 
 export const OnboardScreen: FC = () => {
   const {
     theme: { colors },
   } = useCustomTheme();
-  const handleDone = () => {
-    // setIsOnboarding: false;
+  const updateUserValues = useStore(state => state.updateUserValues);
+
+  const handleDone = async () => {
+    try {
+      const update = { newUser: false };
+      const config = api.user.update({ update });
+
+      const { data } = await axios.request(config);
+
+      console.log({ data });
+
+      updateUserValues(data);
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.log(parsedAxiosError(err).error);
+      }
+    }
   };
 
   return (
     <Onboarding
       titleStyles={{ color: colors.secondary }}
+      onDone={handleDone}
       pages={[
         {
           backgroundColor: colors.background,

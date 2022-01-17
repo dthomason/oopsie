@@ -16,6 +16,7 @@ interface ResponsePayload {
   id: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
 }
 
 export type SignUpRequest = CreateRequest;

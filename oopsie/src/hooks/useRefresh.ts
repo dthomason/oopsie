@@ -36,7 +36,7 @@ export const useRefresh = (): UseUser => {
         updateUserValues(data);
         setToken(validToken);
         setSignedIn(true);
-        console.log('Success!!');
+        console.log('Token Updated!!');
       }
     } catch (err) {
       setSignedIn(false);

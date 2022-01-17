@@ -46,6 +46,14 @@ export const Home: FC = () => {
     theme: { colors },
   } = useCustomTheme();
 
+  const readableUserValues = {
+    ...userValues,
+    mobileNumber: userValues.mobile,
+    verifiedMobile: userValues.verifiedMobile,
+    newUser: userValues.newUser,
+    exp: userValues?.exp ? new Date(userValues.exp) : 0,
+  };
+
   useEffect(() => {
     if (permissions === 'undefined') {
       (async () => {
@@ -115,8 +123,8 @@ export const Home: FC = () => {
     <View style={styles.container}>
       <Text h3>Welcome!!</Text>
       <Text h4>Great Job, almost all setup just one more item left.</Text>
-      {userValues &&
-        Object.entries(userValues).map(([key, value]) => (
+      {readableUserValues &&
+        Object.entries(readableUserValues).map(([key, value]) => (
           <View key={key}>
             <Text>{`${key}: ${value}`}</Text>
           </View>

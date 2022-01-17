@@ -38,6 +38,12 @@ router.get(
   asyncHandler(async (req, res) => UserController.show(req, res)),
 );
 
+router.put(
+  '/user',
+  verifyToken,
+  asyncHandler(async (req, res) => UserController.put(req, res)),
+);
+
 router.get(
   '/contacts',
   verifyToken,

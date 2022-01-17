@@ -8,6 +8,7 @@ export interface UserProfile {
   id: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
   pin: string;
 }
 
@@ -20,6 +21,7 @@ const select = Prisma.validator<Prisma.UserSelect>()({
   id: true,
   mobile: true,
   verifiedMobile: true,
+  newUser: true,
 });
 
 const create = async (args: CreateInput): Promise<UserProfile> => {
@@ -93,7 +95,7 @@ const update = async (
   id: string,
   userData: Partial<UserProfile>,
 ): Promise<UserProfile> => {
-  if (userData.pin) {
+  if (userData?.pin) {
     const pinNumber = formatPin(userData.pin);
 
     userData.pin = await hash(pinNumber, 10);

@@ -49,6 +49,7 @@ export class AuthController {
         id: user.id,
         mobile: user.mobile,
         verifiedMobile: user.verifiedMobile,
+        newUser: user.newUser,
       };
 
       res.cookie('accessToken', jwtAccess, cookieConfig);

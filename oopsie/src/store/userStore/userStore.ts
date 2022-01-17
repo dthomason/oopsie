@@ -1,14 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import decode, { JwtPayload } from 'jwt-decode';
 import { CountryCode } from 'react-native-country-picker-modal';
-import create, { GetState, SetState, StateSelector } from 'zustand';
-import {
-  devtools,
-  persist,
-  StoreApiWithDevtools,
-  StoreApiWithPersist,
-} from 'zustand/middleware';
-import shallow from 'zustand/shallow';
+import create from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 import { im } from '../middleware/immerMiddleware';
 
@@ -22,9 +16,9 @@ export const decodeToken = (token: string): TokenParams => {
 
 interface TokenParams extends JwtPayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
   scope: string[];
 }
 
@@ -33,6 +27,8 @@ interface InputUserValues {
   email?: string;
   mobile?: string;
   verifiedMobile?: boolean;
+  newUser?: boolean;
+  exp?: Date;
 }
 
 const initialValues = {
@@ -40,6 +36,8 @@ const initialValues = {
   email: '',
   mobile: '',
   verifiedMobile: false,
+  newUser: true,
+  exp: 0,
 };
 
 type Permissions = 'undefined' | 'authorized' | 'denied';
@@ -60,12 +58,13 @@ export interface UserStore {
   token: string;
   successfulSync: boolean;
   currentStamp: string;
-  tokenExpired: boolean;
+  newUser: boolean;
   typedValues: TypedValues;
   userValues: InputUserValues;
   permissions: Permissions;
   recordIDs: string[];
   setCountryCode: (countryCode: CountryCode) => void;
+  setNewUser: (isNew: boolean) => void;
   setCurrentStamp: (stamp: string) => void;
   setSuccessfulSync: (result: boolean) => void;
   setTypedValues: (typed: TypedValues) => void;
@@ -90,15 +89,16 @@ export const useStore = create<UserStore>(
         permissions: 'undefined',
         recordIDs: [''],
         signedIn: false,
+        newUser: true,
         successfulSync: false,
         token: '',
-        tokenExpired: true,
         typedValues: {},
         userValues: {},
         setCountryCode: (countryCode: CountryCode) => set({ countryCode }),
         setCurrentStamp: (stamp: string) => set({ currentStamp: stamp }),
         setSuccessfulSync: (result: boolean) => set({ successfulSync: result }),
         setDarkMode: (dark: boolean) => set({ isDark: dark }),
+        setNewUser: (isNew: boolean) => set({ newUser: isNew }),
         setLoading: (loading: boolean) => set({ loading }),
         setPermissions: (permissions: Permissions) => set({ permissions }),
         setToken: async (token: string) => set({ token }),

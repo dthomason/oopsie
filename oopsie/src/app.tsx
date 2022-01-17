@@ -31,9 +31,7 @@ const App: FC = () => {
         if (stillValid) {
           console.log('Fetching User settings and logging in...');
 
-          async () => {
-            await refreshToken(foundToken);
-          };
+          refreshToken(foundToken);
 
           console.log('Success!');
         }

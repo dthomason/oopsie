@@ -12,6 +12,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { HeaderAppBar } from '../components';
 import { Home, Activity, UserSettings } from '../screens';
 import { OnboardScreen } from '../screens/appScreens/onboard/onboardScreen';
+import { useStore } from '../store';
 
 export type AppParamList = {
   Home: undefined;
@@ -41,6 +42,19 @@ export type AppNavProps = {
 };
 
 export const AppNavigator: FC = () => {
+  const userValues = useStore(state => state.userValues);
+
+  if (userValues.newUser)
+    return (
+      <AppStack.Navigator initialRouteName="OnboardScreen">
+        <AppStack.Screen
+          options={{ headerShown: false }}
+          name="OnboardScreen"
+          component={OnboardScreen}
+        />
+      </AppStack.Navigator>
+    );
+
   return (
     <AppStack.Navigator initialRouteName="OnboardScreen">
       <AppStack.Screen
@@ -49,7 +63,6 @@ export const AppNavigator: FC = () => {
         component={Main}
       />
       <AppStack.Screen name="Settings" component={UserSettings} />
-      <AppStack.Screen name="OnboardScreen" component={OnboardScreen} />
     </AppStack.Navigator>
   );
 };
