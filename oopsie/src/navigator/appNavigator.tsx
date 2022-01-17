@@ -19,7 +19,6 @@ export type AppParamList = {
   Settings: undefined;
   Activity: undefined;
   Main: undefined;
-  OnboardScreen: undefined;
 };
 
 export type AppScreenProps = BottomTabNavigationProp<
@@ -31,6 +30,12 @@ export type AppScreenProps = BottomTabNavigationProp<
 export type AppNavigation = AppScreenProps['navigation'];
 
 export type AppRoute = AppScreenProps['route'];
+
+type OnboardingParamList = {
+  OnboardScreen: undefined;
+};
+
+const OnboardStack = createNativeStackNavigator<OnboardingParamList>();
 
 const AppStack = createNativeStackNavigator<AppParamList>();
 
@@ -46,17 +51,17 @@ export const AppNavigator: FC = () => {
 
   if (userValues.newUser)
     return (
-      <AppStack.Navigator initialRouteName="OnboardScreen">
-        <AppStack.Screen
+      <OnboardStack.Navigator>
+        <OnboardStack.Screen
           options={{ headerShown: false }}
           name="OnboardScreen"
           component={OnboardScreen}
         />
-      </AppStack.Navigator>
+      </OnboardStack.Navigator>
     );
 
   return (
-    <AppStack.Navigator initialRouteName="OnboardScreen">
+    <AppStack.Navigator initialRouteName="Main">
       <AppStack.Screen
         options={{ headerShown: false }}
         name="Main"
@@ -87,17 +92,6 @@ const Main: FC = ({ children }) => {
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="OnboardScreen"
-        component={OnboardScreen}
-        options={{
-          tabBarLabel: 'OnboardScreen',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="menu" color={color} size={size} />
           ),
         }}
       />

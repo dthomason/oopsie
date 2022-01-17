@@ -6,7 +6,7 @@ import LazyIcon from '../../../../assets/images/lazy_lounge.svg';
 import OopsieWord from '../../../../assets/images/oopsie_word.svg';
 import Phone from '../../../../assets/images/phone.svg';
 import Question from '../../../../assets/images/what.svg';
-import { useCustomTheme } from '../../../hooks';
+import { useContacts, useCustomTheme } from '../../../hooks';
 import { isAxiosError, parsedAxiosError } from '../../../lib';
 import * as api from '../../../sdk';
 import { useStore } from '../../../store';
@@ -15,6 +15,8 @@ export const OnboardScreen: FC = () => {
   const {
     theme: { colors },
   } = useCustomTheme();
+
+  useContacts();
   const updateUserValues = useStore(state => state.updateUserValues);
 
   const handleDone = async () => {

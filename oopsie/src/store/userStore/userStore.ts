@@ -19,6 +19,7 @@ interface TokenParams extends JwtPayload {
   mobile: string;
   verifiedMobile: boolean;
   newUser: boolean;
+  exp: number;
   scope: string[];
 }
 
@@ -28,7 +29,7 @@ interface InputUserValues {
   mobile?: string;
   verifiedMobile?: boolean;
   newUser?: boolean;
-  exp?: Date;
+  exp?: number;
 }
 
 const initialValues = {
@@ -40,7 +41,7 @@ const initialValues = {
   exp: 0,
 };
 
-type Permissions = 'undefined' | 'authorized' | 'denied';
+export type Permissions = 'undefined' | 'authorized' | 'denied';
 
 interface TypedValues {
   email?: string;
@@ -58,13 +59,11 @@ export interface UserStore {
   token: string;
   successfulSync: boolean;
   currentStamp: string;
-  newUser: boolean;
   typedValues: TypedValues;
   userValues: InputUserValues;
   permissions: Permissions;
   recordIDs: string[];
   setCountryCode: (countryCode: CountryCode) => void;
-  setNewUser: (isNew: boolean) => void;
   setCurrentStamp: (stamp: string) => void;
   setSuccessfulSync: (result: boolean) => void;
   setTypedValues: (typed: TypedValues) => void;
@@ -89,7 +88,6 @@ export const useStore = create<UserStore>(
         permissions: 'undefined',
         recordIDs: [''],
         signedIn: false,
-        newUser: true,
         successfulSync: false,
         token: '',
         typedValues: {},
@@ -98,7 +96,6 @@ export const useStore = create<UserStore>(
         setCurrentStamp: (stamp: string) => set({ currentStamp: stamp }),
         setSuccessfulSync: (result: boolean) => set({ successfulSync: result }),
         setDarkMode: (dark: boolean) => set({ isDark: dark }),
-        setNewUser: (isNew: boolean) => set({ newUser: isNew }),
         setLoading: (loading: boolean) => set({ loading }),
         setPermissions: (permissions: Permissions) => set({ permissions }),
         setToken: async (token: string) => set({ token }),

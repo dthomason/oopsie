@@ -53,11 +53,13 @@ class AuthService {
     id,
     mobile,
     verifiedMobile,
+    newUser,
   }: Partial<UserProfile>): Promise<any> {
     const tokenBaseParams = {
       id,
       mobile,
       verifiedMobile,
+      newUser,
       aud: 'myPhone',
       exp: futureDate.getTime(),
       scope: ['openid', 'profile', 'offline_access'],

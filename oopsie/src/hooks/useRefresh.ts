@@ -33,6 +33,8 @@ export const useRefresh = (): UseUser => {
       } else {
         const data = decodeToken(validToken);
 
+        console.log({ data });
+
         updateUserValues(data);
         setToken(validToken);
         setSignedIn(true);
