@@ -1,8 +1,8 @@
-import { decode } from 'jsonwebtoken';
 import setCookie from 'set-cookie-parser';
 import request from 'supertest';
 
 import app from '../../app';
+import { decodeToken } from '../../middleware';
 import { UserService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
 import { fakerPhoneGen } from '../../testHelpers';
@@ -56,16 +56,16 @@ describe('POST api/auth/signup', () => {
 
       const accessToken = cookie.accessToken.value;
 
-      const payload = decode(accessToken, {
-        complete: true,
-      })?.payload;
+      const payload = decodeToken(accessToken);
+
+      const roles = payload?.roles ? payload?.roles[0] : null;
 
       const now = new Date().getSeconds();
 
       expect(payload?.mobile).toBe(build.mobile);
       expect(payload?.verifiedMobile).toBe(true);
       expect(payload?.aud).toBe('myPhone');
-      expect(payload?.roles[0]).toBe('user');
+      expect(roles).toBe('user');
       expect(payload?.exp).toBeGreaterThan(now);
 
       expect(body.verifiedMobile).toBe(true);
@@ -144,9 +144,7 @@ describe('POST NEW /api/auth/signin', () => {
 
       const accessToken = cookie.accessToken.value;
 
-      const payload = decode(accessToken, {
-        complete: true,
-      })?.payload;
+      const payload = decodeToken(accessToken);
 
       expect(payload?.mobile).toBe(build.mobile);
 
