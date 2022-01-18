@@ -1,101 +1,43 @@
 import CookieManager from '@react-native-cookies/cookies';
-import axios from 'axios';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Contacts from 'react-native-contacts';
 import { Switch, Text } from 'react-native-elements';
 
 import { useCustomTheme } from '../../../hooks';
-import { parseContacts } from '../../../lib';
-import * as api from '../../../sdk';
 import { useStore } from '../../../store';
 
 export const Home: FC = () => {
   const setSignedIn = useStore(state => state.setSignedIn);
-  const permissions = useStore(state => state.permissions);
-  const setPermissions = useStore(state => state.setPermissions);
   const successfulSync = useStore(state => state.successfulSync);
-  const setSuccessfulSync = useStore(state => state.setSuccessfulSync);
-  const currentStamp = useStore(state => state.currentStamp);
-  const setCurrentStamp = useStore(state => state.setCurrentStamp);
   const userValues = useStore(state => state.userValues);
   const [enabled, setEnabled] = useState(false);
   const {
     theme: { colors },
   } = useCustomTheme();
 
-  useEffect(() => {
-    if (permissions === 'undefined') {
-      (async () => {
-        try {
-          const getPermission = await Contacts.checkPermission();
+  const readableUserValues = {
+    ...userValues,
+    mobileNumber: userValues.mobile,
+    verifiedMobile: userValues.verifiedMobile,
+    newUser: userValues.newUser,
+    exp: userValues?.exp ? new Date(userValues.exp) : 0,
+  };
 
-          setPermissions(getPermission);
-        } catch (err) {
-          console.error(err);
-        }
-      })();
-    }
-  }, [permissions, setPermissions]);
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    if (permissions === 'authorized' && !successfulSync) {
-      (async () => {
-        try {
-          const results = await Contacts.getAllWithoutPhotos();
-
-          const { parsed, stamp } = parseContacts(results);
-
-          if (currentStamp === stamp) return setSuccessfulSync(true);
-
-          const config = api.contacts.create({ contacts: parsed });
-
-          const response = await axios.request(config);
-
-          if (response.status === 201) {
-            setSuccessfulSync(true);
-            setCurrentStamp(stamp);
-            console.log('STORED SUCCESSFULLY');
-          } else {
-            setSuccessfulSync(false);
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      })();
-    }
-
-    return () => {
-      source.cancel();
-    };
-  }, [
-    currentStamp,
-    permissions,
-    setCurrentStamp,
-    setSuccessfulSync,
-    successfulSync,
-  ]);
-
-  useEffect(() => {
-    const handleEnabled = async () => {
-      await CookieManager.clearAll();
-      useStore.persist.clearStorage();
-      setSignedIn(false);
-    };
+  const handleChange = async () => {
+    setEnabled(!enabled);
 
     if (enabled) {
-      handleEnabled();
+      await CookieManager.clearAll();
+      setSignedIn(false);
     }
-  }, [enabled, setSignedIn]);
+  };
 
   return (
     <View style={styles.container}>
       <Text h3>Welcome!!</Text>
       <Text h4>Great Job, almost all setup just one more item left.</Text>
-      {userValues &&
-        Object.entries(userValues).map(([key, value]) => (
+      {readableUserValues &&
+        Object.entries(readableUserValues).map(([key, value]) => (
           <View key={key}>
             <Text>{`${key}: ${value}`}</Text>
           </View>
@@ -103,7 +45,7 @@ export const Home: FC = () => {
       <Text h1></Text>
       <Switch
         value={enabled}
-        onChange={() => setEnabled(!enabled)}
+        onValueChange={handleChange}
         color={enabled ? colors.secondary : colors.grey0}
       />
       <View style={{ paddingTop: 12 }}>

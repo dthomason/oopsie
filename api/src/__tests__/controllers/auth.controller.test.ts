@@ -5,8 +5,7 @@ import request from 'supertest';
 import app from '../../app';
 import { UserService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
-import { userBuilder } from '../../testHelpers';
-import { formatPhoneNumber } from '../../utils';
+import { fakerPhoneGen } from '../../testHelpers';
 
 beforeEach(async () => {
   const mockedStart = jest.spyOn(service, 'startVerification');
@@ -19,23 +18,23 @@ beforeEach(async () => {
 describe('POST api/auth/signup', () => {
   describe('signup then log in with a valid token', () => {
     it('returns 200, token and Info', async () => {
-      const newUser = userBuilder();
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
+
       const response = await request(app)
         .post('/api/auth/signup')
-        .send(newUser)
+        .send({ mobile: build.mobile, region: build.region })
         .expect(200);
 
       const returned = response.body;
 
-      expect(returned.email).toBe(newUser.email.toLowerCase());
-      expect(returned.mobile).toBe(formatPhoneNumber(newUser.mobile));
+      expect(returned.mobile).toBe(build.mobile);
       expect(returned.verifiedMobile).toBe(false);
-      expect(response.body.password).toBeUndefined();
-      expect(response.body.pin).toBeUndefined();
 
       const verifyRequest = {
-        email: newUser.email,
-        mobile: newUser.mobile,
+        mobile: build.mobile,
         code: '123456',
       };
 
@@ -53,7 +52,6 @@ describe('POST api/auth/signup', () => {
       });
 
       expect(cookie.accessToken.httpOnly).toBe(true);
-      // eslint-disable-next-line jest/valid-expect
       expect(cookie.accessToken.expires).toBeDefined;
 
       const accessToken = cookie.accessToken.value;
@@ -64,16 +62,13 @@ describe('POST api/auth/signup', () => {
 
       const now = new Date().getSeconds();
 
-      expect(payload?.email).toBe(newUser.email.toLowerCase());
-      expect(payload?.mobile).toBe(formatPhoneNumber(newUser.mobile));
+      expect(payload?.mobile).toBe(build.mobile);
       expect(payload?.verifiedMobile).toBe(true);
       expect(payload?.aud).toBe('myPhone');
       expect(payload?.roles[0]).toBe('user');
       expect(payload?.exp).toBeGreaterThan(now);
 
       expect(body.verifiedMobile).toBe(true);
-
-      expect(body.email).toBe(newUser.email.toLowerCase());
 
       await request(app)
         .get('/api/user')
@@ -86,7 +81,10 @@ describe('POST api/auth/signup', () => {
 
   describe('invalid token to GET /user', () => {
     it('returns a 401 forbidden', async () => {
-      const newUser = userBuilder();
+      const newUser = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
+      };
 
       await request(app).post('/api/auth/signup').send(newUser).expect(200);
 
@@ -98,10 +96,14 @@ describe('POST api/auth/signup', () => {
   });
 
   describe('email already has an account', () => {
-    const newUser = userBuilder();
+    const newUser = {
+      mobile: fakerPhoneGen(),
+      region: 'US',
+    };
     const message = 'User Already Exists. Please Sign In';
 
-    it('returns 409 with notification', async () => {
+    // TODO: make this test logging in the person instead
+    xit('returns 409 with notification', async () => {
       await request(app).post('/api/auth/signup').send(newUser).expect(200);
 
       const response = await request(app)
@@ -117,18 +119,17 @@ describe('POST api/auth/signup', () => {
 describe('POST NEW /api/auth/signin', () => {
   describe('with correct creds', () => {
     it('creates a new token and logs in user', async () => {
-      const newUser = {
-        ...userBuilder(),
+      const build = {
+        mobile: fakerPhoneGen(),
+        region: 'US',
         verifiedMobile: true,
       };
 
-      await UserService.create({
-        ...newUser,
-      });
+      await UserService.create(build);
 
       const response = await request(app)
         .post('/api/auth/signin')
-        .send({ email: newUser.email, password: newUser.password })
+        .send({ mobile: build.mobile, region: 'US' })
         .expect(200);
 
       const { headers } = response;
@@ -139,7 +140,6 @@ describe('POST NEW /api/auth/signin', () => {
       });
 
       expect(cookie.accessToken.httpOnly).toBe(true);
-      // eslint-disable-next-line jest/valid-expect
       expect(cookie.accessToken.expires).toBeDefined;
 
       const accessToken = cookie.accessToken.value;
@@ -148,7 +148,7 @@ describe('POST NEW /api/auth/signin', () => {
         complete: true,
       })?.payload;
 
-      expect(payload?.email).toBe(newUser.email.toLowerCase());
+      expect(payload?.mobile).toBe(build.mobile);
 
       await request(app)
         .get('/api/user')
@@ -158,41 +158,6 @@ describe('POST NEW /api/auth/signin', () => {
         .expect(200);
     });
   });
-
-  describe('missing password', () => {
-    it('returns back a 400', async () => {
-      const newUser = userBuilder();
-
-      await request(app).post('/api/auth/signup').send(newUser).expect(200);
-
-      await request(app)
-        .post('/api/auth/signin')
-        .type('form')
-        .send({ email: newUser.email })
-        .expect(400);
-    });
-  });
-
-  describe('incorrect creds', () => {
-    const user = userBuilder();
-    const message = 'Account not Found';
-
-    it('returns 400 with message', async () => {
-      await request(app).post('/api/auth/signup').send(user).expect(200);
-
-      const credentials = { email: 'wrong@wrong.com', password: user.password };
-      const response = await request(app)
-        .post('/api/auth/signin')
-        .send(credentials)
-        .expect(400);
-
-      expect(response.body).toBe(message);
-    });
-  });
-
-  // describe('expired token', () => {
-  //   test('return 401 unauthorized');
-  // });
 });
 
 // Expired Token

@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { useEffect } from 'react';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
 
 import { configureAxios, parsedAxiosError } from '../../../lib';
@@ -40,7 +39,6 @@ export const useSignIn = (
         updateUserValues(data);
 
         navigation.replace('Verify', {
-          email: data.email,
           mobile: data.mobile,
         });
       }

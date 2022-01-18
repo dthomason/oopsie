@@ -21,4 +21,21 @@ export class UserController {
       res.status(500).json(e);
     }
   }
+
+  static async put(req: Request, res: Response): Promise<any> {
+    try {
+      const { id } = req.body.user;
+      const { update } = req.body;
+
+      console.log({ id, update });
+
+      const [user, err] = await to(UserService.update(id, update));
+
+      if (err) log(err, 'Put');
+
+      res.status(200).json(user);
+    } catch (e) {
+      res.status(500).json(e);
+    }
+  }
 }

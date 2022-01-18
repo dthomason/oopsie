@@ -1,8 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 
 interface CreateRequest {
-  email: string;
-  password: string;
+  mobile: string;
 }
 
 interface CreateConfig extends AxiosRequestConfig {
@@ -14,9 +13,9 @@ interface CreateConfig extends AxiosRequestConfig {
 
 interface ResponsePayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
 }
 
 export type SignInRequest = CreateRequest;
@@ -25,7 +24,7 @@ export type SignInResponse = ResponsePayload;
 /**
  * POST `/api/auth/signin
  *
- * { email: string, password: string }
+ * { mobile: string }
  */
 export const create = (data: CreateRequest): CreateConfig => {
   return {

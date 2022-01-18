@@ -12,7 +12,6 @@ import { VerifyRequest } from '../../../sdk/src/verify';
 import { useStore } from '../../../store';
 
 interface Config {
-  email: string;
   mobile: string;
   code: string;
 }
@@ -35,8 +34,6 @@ export const useVerifyMobile = (
       configureAxios({ withCredentials: true });
       const { data, headers } = await axios.request(config);
       const { validToken, validData } = validateToken(headers['set-cookie']);
-
-      console.log({ validToken, validData });
 
       if (data.verifiedMobile && validToken && validData) {
         setToken(validToken);

@@ -7,9 +7,9 @@ interface RequestConfig extends AxiosRequestConfig {
 
 interface ResponsePayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
 }
 
 export type ShowUserResponse = ResponsePayload;

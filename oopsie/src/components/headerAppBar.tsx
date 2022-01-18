@@ -34,12 +34,13 @@ export const HeaderAppBar: FC<Props> = ({ onPress }) => {
         }
         rightComponent={
           <Icon
-            onPress={() => handlePress}
+            onPress={handlePress}
             name="menu"
             type="feather"
             color={colors.text}
             size={30}
             containerStyle={styles.sizing}
+            tvParallaxProperties={undefined}
           />
         }
       />

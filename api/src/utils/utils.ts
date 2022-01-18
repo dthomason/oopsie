@@ -21,12 +21,12 @@ export async function to<R = AsyncResult, E = AsyncError>(
   }
 }
 
-export const log = (e: any, action: string, email?: string): void => {
+export const log = (e: any, action: string, mobile?: string): void => {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     if (e.code === 'P2002') {
       console.log(
-        `${action}: Unique Constraint Violation, a user with email: ${
-          email ? email.toLowerCase() : 'unknown'
+        `${action}: Unique Constraint Violation, the account with: ${
+          mobile ? mobile : 'unknown'
         } already exists`,
       );
     }

@@ -167,7 +167,7 @@ const error = async (req: Request): Promise<VoiceServiceResponse> => {
       const mobile = req.query.mobile?.toString() || '';
 
       const args = {
-        number: mobile,
+        number: formatPhoneNumber(mobile),
       };
 
       const { action, script } = dialog(args).errorNumber;
@@ -182,17 +182,16 @@ const error = async (req: Request): Promise<VoiceServiceResponse> => {
 
     case 'pin': {
       const id = req.params?.id || '';
-      const pin = req.query?.pin?.toString() || '';
 
       const args = {
         id,
-        pin,
       };
 
-      const { action, script } = dialog(args).errorPin;
+      const { action, script, numDigits } = dialog(args).errorPin;
 
       const config = {
         ...gatherConfig,
+        numDigits,
         action,
       };
 

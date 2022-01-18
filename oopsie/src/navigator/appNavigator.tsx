@@ -10,14 +10,13 @@ import React, { FC } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 
 import { HeaderAppBar } from '../components';
-import { Home, Activity, UserSettings, Sample } from '../screens';
+import { Home, Activity, UserSettings } from '../screens';
 
 export type AppParamList = {
   Home: undefined;
   Settings: undefined;
   Activity: undefined;
   Main: undefined;
-  Sample: undefined;
 };
 
 export type AppScreenProps = BottomTabNavigationProp<
@@ -72,17 +71,6 @@ const Main: FC = ({ children }) => {
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Sample"
-        component={Sample}
-        options={{
-          tabBarLabel: 'Sample',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="menu" color={color} size={size} />
           ),
         }}
       />

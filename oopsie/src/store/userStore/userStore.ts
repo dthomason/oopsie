@@ -1,12 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import decode, { JwtPayload } from 'jwt-decode';
-import create, { GetState, SetState } from 'zustand';
-import {
-  devtools,
-  persist,
-  StoreApiWithDevtools,
-  StoreApiWithPersist,
-} from 'zustand/middleware';
+import { CountryCode } from 'react-native-country-picker-modal';
+import create from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 import { im } from '../middleware/immerMiddleware';
 
@@ -20,9 +16,10 @@ export const decodeToken = (token: string): TokenParams => {
 
 interface TokenParams extends JwtPayload {
   id: string;
-  email: string;
   mobile: string;
   verifiedMobile: boolean;
+  newUser: boolean;
+  exp: number;
   scope: string[];
 }
 
@@ -31,6 +28,8 @@ interface InputUserValues {
   email?: string;
   mobile?: string;
   verifiedMobile?: boolean;
+  newUser?: boolean;
+  exp?: number;
 }
 
 const initialValues = {
@@ -38,9 +37,11 @@ const initialValues = {
   email: '',
   mobile: '',
   verifiedMobile: false,
+  newUser: true,
+  exp: 0,
 };
 
-type Permissions = 'undefined' | 'authorized' | 'denied';
+export type Permissions = 'undefined' | 'authorized' | 'denied';
 
 interface TypedValues {
   email?: string;
@@ -50,6 +51,7 @@ interface TypedValues {
 
 export interface UserStore {
   error: string;
+  countryCode: CountryCode;
   hasHydrated: boolean;
   loading: boolean;
   isDark: boolean;
@@ -57,11 +59,13 @@ export interface UserStore {
   token: string;
   successfulSync: boolean;
   currentStamp: string;
-  tokenExpired: boolean;
+  isOnboarding: boolean;
   typedValues: TypedValues;
   userValues: InputUserValues;
   permissions: Permissions;
   recordIDs: string[];
+  setIsOnboarding: (isOnboarding: boolean) => void;
+  setCountryCode: (countryCode: CountryCode) => void;
   setCurrentStamp: (stamp: string) => void;
   setSuccessfulSync: (result: boolean) => void;
   setTypedValues: (typed: TypedValues) => void;
@@ -73,28 +77,26 @@ export interface UserStore {
   updateUserValues: (user: InputUserValues) => void;
 }
 
-export const useStore = create<
-  UserStore,
-  SetState<UserStore>,
-  GetState<UserStore>,
-  StoreApiWithDevtools<UserStore> & StoreApiWithPersist<UserStore>
->(
+export const useStore = create<UserStore>(
   devtools(
     persist(
       im(set => ({
+        countryCode: 'US',
         currentStamp: '',
         error: '',
         hasHydrated: false,
         isDark: false,
+        isOnboarding: true,
         loading: true,
         permissions: 'undefined',
         recordIDs: [''],
         signedIn: false,
         successfulSync: false,
         token: '',
-        tokenExpired: true,
         typedValues: {},
         userValues: {},
+        setIsOnboarding: (isOnboarding: boolean) => set({ isOnboarding }),
+        setCountryCode: (countryCode: CountryCode) => set({ countryCode }),
         setCurrentStamp: (stamp: string) => set({ currentStamp: stamp }),
         setSuccessfulSync: (result: boolean) => set({ successfulSync: result }),
         setDarkMode: (dark: boolean) => set({ isDark: dark }),
@@ -130,3 +132,6 @@ export const useStore = create<
     { name: 'UserStore' },
   ),
 );
+
+// export const useStore = <K>(selector: StateSelector<UserStore, K>): K =>
+//   userStore(selector, shallow);

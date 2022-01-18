@@ -4,11 +4,13 @@ import { View, LogBox, StyleSheet } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import shallow from 'zustand/shallow';
 
 import { BrandIcon } from './components';
 import { useRefresh, useCustomTheme } from './hooks';
 import { validateToken } from './lib/validateToken';
 import { AuthNavigator, AppNavigator } from './navigator';
+import { OnboardNavigator } from './navigator/onboardNavigator';
 import { useStore } from './store';
 
 LogBox.ignoreLogs(['Redux']);
@@ -18,10 +20,17 @@ const App: FC = () => {
   const { refreshToken } = useRefresh();
   const { iconColor, theme } = useCustomTheme();
   const [isLoading, setIsLoading] = useState(true);
-  const signedIn = useStore(state => state.signedIn);
+  const { signedIn, hasHydrated, isOnboarding } = useStore(
+    ({ signedIn, isOnboarding, hasHydrated }) => ({
+      signedIn,
+      isOnboarding,
+      hasHydrated,
+    }),
+    shallow,
+  );
 
   useEffect(() => {
-    if (!isLoading && signedIn) {
+    if (hasHydrated && signedIn) {
       const foundToken = useStore.getState().token;
 
       if (foundToken) {
@@ -29,27 +38,38 @@ const App: FC = () => {
 
         if (stillValid) {
           console.log('Fetching User settings and logging in...');
-          refreshToken(foundToken);
+
+          (async () => {
+            await refreshToken(foundToken);
+          })();
+
+          console.log('Success!');
         }
       }
     }
 
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 1000);
 
     return;
-  }, [isLoading, refreshToken, signedIn]);
+  }, [hasHydrated, refreshToken, signedIn]);
 
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         {isLoading ? (
           <View style={styles.loading}>
-            <BrandIcon color={iconColor} size={110} />
+            <BrandIcon color={iconColor} size={140} />
           </View>
         ) : (
           <ThemeProvider theme={theme}>
             <NavigationContainer theme={theme}>
-              {signedIn ? <AppNavigator /> : <AuthNavigator />}
+              {!signedIn ? (
+                <AuthNavigator />
+              ) : isOnboarding ? (
+                <OnboardNavigator />
+              ) : (
+                <AppNavigator />
+              )}
             </NavigationContainer>
           </ThemeProvider>
         )}
@@ -61,5 +81,10 @@ const App: FC = () => {
 export default App;
 
 const styles = StyleSheet.create({
-  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 90,
+  },
 });

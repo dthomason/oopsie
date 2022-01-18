@@ -3,10 +3,9 @@ import request from 'supertest';
 
 import app from '../../app';
 import { sortArray } from '../../lib';
-import db from '../../lib/db';
 import { UserService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
-import { contactBuilder, userBuilder } from '../../testHelpers';
+import { contactBuilder, fakerPhoneGen } from '../../testHelpers';
 import { getAccessToken } from '../../testHelpers/getAccessToken';
 
 beforeEach(async () => {
@@ -17,26 +16,23 @@ beforeEach(async () => {
   mockedCheck.mockResolvedValue({ status: 'success' });
 });
 
-afterAll(async () => {
-  await db.$disconnect;
-});
-
 describe('POST /api/contacts', () => {
-  const newContacts = times(1)
-    .map(() => contactBuilder())
-    .sort(sortArray);
-
   test('returns 201 Ok and created contacts', async () => {
     const newUser = {
-      ...userBuilder(),
+      mobile: fakerPhoneGen(),
+      region: 'US',
       verifiedMobile: true,
     };
 
     await UserService.create(newUser);
 
+    const newContacts = times(1)
+      .map(() => contactBuilder())
+      .sort(sortArray);
+
     const res = await request(app)
       .post('/api/auth/signin')
-      .send({ email: newUser.email, password: newUser.password })
+      .send({ mobile: newUser.mobile, region: newUser.region })
       .expect(200);
 
     const { headers } = res;
@@ -66,36 +62,37 @@ describe('POST /api/contacts', () => {
 });
 
 describe('GET /api/contacts', () => {
-  const user1Contacts = times(2)
-    .map(() => contactBuilder())
-    .sort(sortArray);
-  const user2Contacts = times(1)
-    .map(() => contactBuilder())
-    .sort(sortArray);
-
   test('returns 200 Ok with user contacts', async () => {
     const newUser1 = {
-      ...userBuilder(),
+      mobile: fakerPhoneGen(),
+      region: 'US',
+      verifiedMobile: true,
+    };
+    const newUser2 = {
+      mobile: fakerPhoneGen(),
+      region: 'US',
       verifiedMobile: true,
     };
 
     await UserService.create(newUser1);
 
-    const newUser2 = {
-      ...userBuilder(),
-      verifiedMobile: true,
-    };
-
     await UserService.create(newUser2);
+
+    const user1Contacts = times(2)
+      .map(() => contactBuilder())
+      .sort(sortArray);
+    const user2Contacts = times(1)
+      .map(() => contactBuilder())
+      .sort(sortArray);
 
     const res1 = await request(app)
       .post('/api/auth/signin')
-      .send({ email: newUser1.email, password: newUser1.password })
+      .send({ mobile: newUser1.mobile, region: newUser1.region })
       .expect(200);
 
     const res2 = await request(app)
       .post('/api/auth/signin')
-      .send({ email: newUser2.email, password: newUser2.password })
+      .send({ mobile: newUser2.mobile, region: newUser2.region })
       .expect(200);
 
     await request(app)

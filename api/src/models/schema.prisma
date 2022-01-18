@@ -11,16 +11,22 @@ generator client {
 }
 
 model User {
-  id             String    @id @unique @default(cuid())
-  email          String    @unique @db.VarChar(255)
-  firstName      String?   @db.VarChar(255)
-  lastName       String?   @db.VarChar(255)
-  mobile         String    @unique @db.VarChar(10)
-  verifiedMobile Boolean   @db.Boolean
-  verifiedEmail  Boolean   @db.Boolean
-  password       String    @db.VarChar(255)
-  pin            String?   @db.VarChar(255)
-  contacts       Contact[]
+  id             String   @id @unique @default(cuid())
+  mobile         String   @unique @db.VarChar(20)
+  region         String?  @db.VarChar(2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  verifiedMobile Boolean? @default(false) @db.Boolean
+  newUser        Boolean? @default(true) @db.Boolean
+
+  //optional
+  email         String?   @db.VarChar(255)
+  firstName     String?   @db.VarChar(255)
+  lastName      String?   @db.VarChar(255)
+  password      String?   @db.VarChar(255)
+  pin           String?   @db.VarChar(255)
+  verifiedEmail Boolean?  @default(false) @db.Boolean
+  contacts      Contact[]
 }
 
 model Contact {

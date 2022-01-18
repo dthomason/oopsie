@@ -1,8 +1,6 @@
-import React, { FC, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { CheckBox } from 'react-native-elements';
-
-import { useContacts } from '../../../hooks';
+import React, { FC } from 'react';
+import { View } from 'react-native';
+import { CheckBox, Text } from 'react-native-elements';
 
 interface Steps {
   label: string;
@@ -29,12 +27,6 @@ const stepsRemaining: Steps[] = [
 ];
 
 export const Activity: FC = () => {
-  const { handlePermissions, permissions } = useContacts();
-
-  useEffect(() => {
-    handlePermissions();
-  }, [permissions]);
-
   return (
     <View
       style={{
@@ -53,17 +45,15 @@ export const Activity: FC = () => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
+            backgroundColor: 'white',
             paddingTop: 16,
           }}
         >
           <CheckBox
-            key={step.label}
-            style={{
-              borderWidth: 1,
-              borderColor: '#BBBBBB',
-              backgroundColor: '#EEEEEE',
-              width: '95%',
-            }}
+            center
+            title="Click Here"
+            checked={true}
+            onPress={() => console.log('yes')}
           />
         </View>
       ))}
