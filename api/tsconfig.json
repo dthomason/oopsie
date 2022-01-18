@@ -1,5 +1,4 @@
 {
-  "extends": "../tsconfig",
   "compilerOptions": {
     "target": "ES2019",
     "sourceMap": true,
@@ -7,12 +6,24 @@
     "strictNullChecks": true,
     "strict": true,
     "lib": ["esnext", "ES2015", "ES2019", "ES2020"],
-    "esModuleInterop": true,
-    "moduleResolution": "node",
     "noImplicitAny": true,
     "types": ["node", "jest"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
   },
   "include": ["src/**/*.ts", "./types/*"],
-  "exclude": ["node_modules", "./design"]
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "./design",
+    "jest.config.js"
+  ],
 }
