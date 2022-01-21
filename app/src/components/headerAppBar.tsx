@@ -40,7 +40,6 @@ export const HeaderAppBar: FC<Props> = ({ onPress }) => {
             color={colors.text}
             size={30}
             containerStyle={styles.sizing}
-            tvParallaxProperties={undefined}
           />
         }
       />
