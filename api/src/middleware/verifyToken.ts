@@ -27,6 +27,7 @@ interface TokenParams extends JwtPayload {
   email: string;
   mobile: string;
   verifiedMobile: boolean;
+  roles?: string[];
 }
 
 export const verifyToken = (
