@@ -11,6 +11,7 @@ const queryLogger = (e: Prisma.QueryEvent): void => {
 
 const db = new PrismaClient({
   log: [
+    // Can make each of these objects one line for readability
     {
       emit: 'event',
       level: 'query',
