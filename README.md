@@ -1,5 +1,8 @@
-#  oopsie    ¯\\\_(ツ)_/¯ ...
+# oopsie ¯\\\_(ツ)\_/¯ ...
+
 ## The Forgetter's Getter
+
+<!-- Testing forked repo PR -->
 
 ## Getting Started In Local Dev
 
@@ -24,9 +27,11 @@
   `yarn workspace node_api ngrok`
 
 - you then take note of the url ngrok gives you back and enter those into the webhook configuration in Twillio's dashboard.
+
 ## Running the App
 
 ### API - Express node js
+
 - make sure you followed the ngrok setup above.
 
 - `yarn install`
@@ -36,6 +41,7 @@
 - Should show success and listening on localhost:3030
 
 ### APP - React Native
+
 - if you have never ran xcode locally before you'll need to make take the time to make sure you have a working xcode environment that builds correctly.
 - `cd ./app`
 - `yarn install`
