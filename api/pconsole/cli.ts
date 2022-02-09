@@ -16,6 +16,7 @@ cli.help();
 const { options }: { options: { url?: string } } = cli.parse();
 
 if (options.url) {
+  // This is super odd. Setting an env var value in code.
   process.env.DATABASE_URL = options.url;
 }
 
