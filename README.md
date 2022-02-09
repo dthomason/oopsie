@@ -2,9 +2,9 @@
 
 ## The Forgetter's Getter
 
-<!-- GP: use doctoc -->
-<!-- GP: This is the first impression of your code, so this file should be prestine -->
-<!-- GP: When I saved this file originally, it automatically added whitespace. Make sure your config is set up correctly for this -->
+<!-- Use doctoc -->
+<!-- This is the first impression of your code, so this file should be prestine -->
+<!-- When I saved this file originally, it automatically added whitespace. Make sure your config is set up correctly for this -->
 
 ## Getting Started In Local Dev
 
@@ -56,3 +56,8 @@
 - `yarn install`
 - `yarn ios`
 - if everything is configured correctly the simulator should pop up for you and and app will load momentarily.
+
+<!-- Feedback for package.json -->
+<!-- Put the shared packages and commands into `./package.json` -->
+<!-- rimraf doesn't look to be used anywhere -->
+<!-- Alphabetical order would help. This does not apply to `pre:` and `post:` calls -->
