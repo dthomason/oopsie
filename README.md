@@ -45,6 +45,8 @@
 
 - `yarn install`
 
+<!-- Isn't the workspace just `api`? -->
+
 - `yarn workspace node_api dev`
 
 - Should show success and listening on localhost:3030

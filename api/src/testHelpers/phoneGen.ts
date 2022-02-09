@@ -44,6 +44,7 @@ export const phoneGen = ({
     ? regionCode
     : randomPickFromArray(supportedRegionCodes);
 
+  // Avoid single- and double-letter variable naming when possible
   const pn = PhoneNumber.getExample(region, type);
 
   return pn;

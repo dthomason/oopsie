@@ -10,6 +10,7 @@ export const findNameMatch = async (
 
   const exact = contacts.filter(contact => contact.firstName === firstName);
 
+  // `exact` will always be present, so no `?` needed
   if (exact?.length === 1) return exact[0];
 
   if (exact?.length > 1 && lastName.length) {

@@ -14,6 +14,8 @@ export const router = Router();
 
 router.get('/healthz', (_, res) => Healthz.show(_, res));
 
+// This file can be DRY'd up big time
+
 router.get(
   '/auth/refresh',
   verifyToken,

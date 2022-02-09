@@ -16,6 +16,7 @@ export interface ValidationResponse {
   user: Partial<UserProfile>;
 }
 
+// In JS/TS, FP > OOP
 class AuthService {
   public path = '/refresh';
   public router = router;

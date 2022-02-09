@@ -5,6 +5,7 @@ import client from 'twilio';
 import 'dotenv-safe/config';
 import db from './lib/db';
 
+// It seems odd to destructure one thing from `process.env` but not the others
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
@@ -18,6 +19,8 @@ nodemon({
   exec: 'ts-node ./src/index.ts',
 });
 
+// `url` is only set once and never modified, so this can be moved down and
+// set via `const`
 let url = '';
 
 nodemon
