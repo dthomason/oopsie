@@ -30,6 +30,7 @@ export const getErrorMessage = (value: any) => {
 };
 
 export const logger = {
+  // Might be able to shrink this down by using implicit return
   info: (e: any) => {
     config.info(getErrorMessage(e));
   },

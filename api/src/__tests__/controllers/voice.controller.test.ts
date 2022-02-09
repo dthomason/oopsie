@@ -22,6 +22,7 @@ const user = {
 };
 const contacts = times(2).map(() => contactBuilder());
 
+// It's becoming an anti-pattern to do object-related setup in `before*` calls
 beforeAll(async () => {
   await UserService.create(user);
 

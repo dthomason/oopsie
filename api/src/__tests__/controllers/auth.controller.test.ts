@@ -7,6 +7,10 @@ import { UserService } from '../../services';
 import * as service from '../../services/verifyMobile.service';
 import { fakerPhoneGen } from '../../testHelpers';
 
+// It's odd to have a `__tests__` directory that has sub-directories
+// Typically, you either have them right next to each other or you place
+// the relevant ones in `__tests__` in the same directory.
+
 beforeEach(async () => {
   const mockedStart = jest.spyOn(service, 'startVerification');
   const mockedCheck = jest.spyOn(service, 'checkVerification');
@@ -30,6 +34,7 @@ describe('POST api/auth/signup', () => {
 
       const returned = response.body;
 
+      // This test goes Assemble, Act, Assert, Act, Assert, Act Assert
       expect(returned.mobile).toBe(build.mobile);
       expect(returned.verifiedMobile).toBe(false);
 
@@ -80,6 +85,7 @@ describe('POST api/auth/signup', () => {
   });
 
   describe('invalid token to GET /user', () => {
+    // 401 Unauthorized
     it('returns a 401 forbidden', async () => {
       const newUser = {
         mobile: fakerPhoneGen(),
@@ -102,6 +108,8 @@ describe('POST api/auth/signup', () => {
     };
     const message = 'User Already Exists. Please Sign In';
 
+    // Do not use in-app `TODO`'s. It's better to have a public board. Try out
+    // Trello -- it's simple and perfect for a personal project
     // TODO: make this test logging in the person instead
     xit('returns 409 with notification', async () => {
       await request(app).post('/api/auth/signup').send(newUser).expect(200);

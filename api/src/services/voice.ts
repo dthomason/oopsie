@@ -28,6 +28,8 @@ interface VoiceServiceResponse {
   script: string;
 }
 
+// Run this project through Code Climate for a lot of readability feedback
+
 const gather = async (req: Request): Promise<VoiceServiceResponse> => {
   const status = req.query?.type || '';
 

@@ -12,7 +12,9 @@ beforeEach(() => {
 
 describe('#Contact Service', () => {
   describe('#addContacts', () => {
+    // The `it` statement doesn't read clearly
     it('that the data added is valid', async () => {
+      // Builders FTW
       const build = {
         mobile: fakerPhoneGen(),
         region: 'US',

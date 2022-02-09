@@ -2,6 +2,7 @@ import { REPLServer } from 'repl';
 
 // import { PrismaClient } from '@prisma/client';
 
+// File doesn't exist
 import db from '../src/orm';
 
 import { makeTag } from './sh';
@@ -19,4 +20,3 @@ export function loadContext(r: REPLServer): any {
   });
   r.context.db = db;
 }
-

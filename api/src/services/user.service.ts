@@ -110,6 +110,7 @@ const update = async (
   return user;
 };
 
+// Capital `U` implies it's called via a constructor (`new UserService`)
 export const UserService = {
   create,
   findById,

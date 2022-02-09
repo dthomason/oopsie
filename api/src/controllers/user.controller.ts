@@ -24,6 +24,7 @@ export class UserController {
 
   static async put(req: Request, res: Response): Promise<any> {
     try {
+      // These two lines can be combined
       const { id } = req.body.user;
       const { update } = req.body;
 

@@ -6,6 +6,9 @@ import { UserProfile, UserService } from '../services';
 
 import { phoneGen } from './phoneGen';
 
+// Prefer factories over fixtures
+// Prefer `builders` for factories, rather than custom factories
+
 interface EmailAddress {
   label: string;
   email: string;

@@ -10,4 +10,6 @@ const formatErrorString = (location = 'server', error: ErrorObject | any) => {
   return `${process.env.NODE_ENV === 'dev' ? `[${location}] ` : ''}${message}`;
 };
 
+// Exporting as default usually makes it more difficult to autocomplete
+// `import` statements.
 export default formatErrorString;

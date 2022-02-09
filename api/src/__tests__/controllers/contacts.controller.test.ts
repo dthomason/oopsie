@@ -43,6 +43,9 @@ describe('POST /api/contacts', () => {
       .send({ contacts: newContacts })
       .expect(201);
 
+    // Move factory-like code to builders
+    // DRY up authN code
+
     const contacts = response.body.sort(sortArray);
 
     const contact1 = contacts[0];
@@ -62,7 +65,9 @@ describe('POST /api/contacts', () => {
 });
 
 describe('GET /api/contacts', () => {
+  // 200 OK
   test('returns 200 Ok with user contacts', async () => {
+    // This test is hard to follow
     const newUser1 = {
       mobile: fakerPhoneGen(),
       region: 'US',

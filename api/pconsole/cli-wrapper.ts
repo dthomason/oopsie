@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// What does pconsole do and/or mean?
+
 import path from 'path';
 
 import execa from 'execa';

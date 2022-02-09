@@ -15,6 +15,7 @@ const cookieConfig = {
   domain: process.env.BASE_URL,
 };
 
+// Why inheritance over functional programming?
 export class AuthController {
   public path = '/auth';
   public router = router;
@@ -33,6 +34,8 @@ export class AuthController {
 
       res.status(200).send(user);
     } catch (e) {
+      // Can't this be set up via middleware so you don't need to `try..catch`
+      // everywhere?
       res.status(500).send(e);
     }
   }

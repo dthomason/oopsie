@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 export const bodyParser = (req: Request, res: Response, next: NextFunction) => {
   const contentType = req.headers['content-type'];
 
+  // `contentType &&` is superfluous here
   if (contentType && contentType === 'application/x-www-form-urlencoded') {
     return urlencoded({ extended: true })(req, res, next);
   }
