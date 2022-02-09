@@ -10,6 +10,7 @@ export class VoiceController {
 
   static async gather(req: Request, res: Response): Promise<any> {
     try {
+      // What does `op` stand for?
       const op = new VoiceResponse();
 
       const { config, script } = await Voice.gather(req);
