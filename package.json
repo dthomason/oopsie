@@ -5,5 +5,8 @@
   "repository": "git@github.com:dthomason/oopsie.git",
   "description": "the forgetters getter",
   "private": true,
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "doctoc": "^2.1.0"
+  }
 }

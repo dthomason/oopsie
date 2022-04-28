@@ -1,43 +1,85 @@
-#  oopsie    ¯\\\_(ツ)_/¯ ...
-## The Forgetter's Getter
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-## Getting Started In Local Dev
+- [<div style="font-size: 56px; color: #387FCF; margin-left: 4px"> Oopsie </div><div style=" font-size: 36px; margin-left: 12px">¯\\\_(ツ)_/¯</div><div>The Forgetter's Getter</div>](#div-stylefont-size-56px-color-387fcf-margin-left-4px-oopsie-divdiv-style-font-size-36px-margin-left-12px_ツ_divdivthe-forgetters-getterdiv)
+- [Getting Started](#getting-started)
+    - [Before You Begin:](#before-you-begin)
+    - [Installing](#installing)
+  - [Configuring your Environment:](#configuring-your-environment)
+    - [Twilio](#twilio)
+    - [NGrok](#ngrok)
+    - [API - Express node js](#api---express-node-js)
+    - [APP - React Native](#app---react-native)
 
-### Requirements
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-- postgres database installed and accessible
-- - I use a local one but you're welcome to use a docker image if that is what you prefer.
+#  <div style="font-size: 56px; color: #387FCF; margin-left: 4px"> Oopsie </div><div style=" font-size: 36px; margin-left: 12px">¯\\\_(ツ)_/¯</div><div>The Forgetter's Getter</div>
 
-- NGROK configured locally before starting the api server.
+# Getting Started
 
-- XCode and fully working ios Simulator for the app.
+### Before You Begin:
 
-### Configuring NGrok
+- The Database used for this project was a [postgres](https://www.postgresql.org/docs/current/tutorial-install.html) server so if you don't have one available we recommend you install one now
 
-- To allow Twilio to reach your local dev api during development you must run [Ngrok](https://dashboard.ngrok.com/get-started/setup).
-- After you've followed the doc to install place the `ngrok` file into the `./node_api/bin/` folder. You may have to create the bin folder if you don't already have one. It's gitignored.
--
-- Before you can begin using ngrok you must register the token first
-  `./bin/ngrok authtoken ${NGROK_TOKEN}`
+- X-Code is required
 
-- the following will route ngroks public url to your local api
-  `yarn workspace node_api ngrok`
+### Installing
 
-- you then take note of the url ngrok gives you back and enter those into the webhook configuration in Twillio's dashboard.
-## Running the App
+- Pull down this repository and `cd` into the root directory
+
+- Copy the `.env.example` file
+
+```bash
+cp .env.example .env
+```
+
+- open the .env file
+
+## Configuring your Environment:
+
+### Twilio
+
+This app utilizes Twilio for it's `Passwordless Auth` verification process as well as the `Dial-By-Name` service.  In order to at least have the api running for Auth you will need to have at least a [free trial Twilio account](https://www.twilio.com/try-twilio).
+  - Passwordless Auth
+    - VERIFY_SERVICE_SID: click [here](https://www.twilio.com/docs/verify/quickstarts/node-express) for how to set that up.
+  - Dial-by-Name (Optional): requires setting up a TWIML app with ngrok
+    - TWILIO_NUMBER
+    - TWILIO_ACCOUNT_SID
+    - TWILIO_AUTH_TOKEN
+
+### NGrok
+
+Ngrok provides a way for Twilio to communicate with your local dev environment by providing a public url that is tunneled to your local running server.  We configured it to automatically update Twilio with that url so there is no need to worry about manually copy and pasting the dynamic value ngrok provides.
+
+- You will need a `NGROK_TOKEN` which you can get for free by signing up [here](https://dashboard.ngrok.com/get-started/setup)
+
+- paste the token in the `.env` file
 
 ### API - Express node js
-- make sure you followed the ngrok setup above.
 
-- `yarn install`
+```bash
+cd api
+yarn install
+yarn dev
+```
 
-- `yarn workspace node_api dev`
+- If Twilio was configured correctly you should see something like the following:
 
-- Should show success and listening on localhost:3030
+```bash
+Server now available at https://079c-73-185-58-123.ngrok.io
+Successfully updated Twilio voiceUrl to https://079c-73-185-58-123.ngrok.io/api/voice/gather
+2022-04-28 04:30:34.837  INFO  🚀 Server ready at: http://localhost:3030
+```
 
 ### APP - React Native
-- if you have never ran xcode locally before you'll need to make take the time to make sure you have a working xcode environment that builds correctly.
-- `cd ./app`
-- `yarn install`
-- `yarn ios`
+
+- If you have never ran X-Code locally before you'll need to make take the time to make sure you have a working xcode environment that builds correctly.
+
+```bash
+cd app
+yarn install
+yarn ios
+```
+
 - if everything is configured correctly the simulator should pop up for you and and app will load momentarily.
