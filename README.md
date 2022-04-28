@@ -83,3 +83,5 @@ yarn ios
 ```
 
 - if everything is configured correctly the simulator should pop up for you and and app will load momentarily.
+
+<image src="app/assets/app_landing.png" style="width: 300px;"/>
