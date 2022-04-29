@@ -22,6 +22,19 @@
 
 - The Database used for this project was a [postgres](https://www.postgresql.org/docs/current/tutorial-install.html) server so if you don't have one available we recommend you install one now
 
+- For MAC
+```bash
+brew install postgresql
+brew services start postgresql
+psql postgres
+CREATE DATABASE lemondb;
+CREATE USER container WITH PASSWORD 'connection';
+ALTER ROLE container WITH SUPERUSER CREATEDB;
+\q
+cd api
+yarn migrate:init
+```
+
 - X-Code is required
 
 ### Installing
